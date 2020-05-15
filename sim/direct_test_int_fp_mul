@@ -1,0 +1,8 @@
+vcs -full64 -R -l tb.log -override_timescale=1ns/1ps \
+-y ../src/adder/cla \
+-y ../src/multiplier/vedic \
+-y ../src/multiplier/int_fp_mul \
+-y ../src/multiplier/mul \
+-y ../utils \
++libext+.v \
+../tb/verilog/int_fp_mul_tb.v

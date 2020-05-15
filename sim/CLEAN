@@ -1,0 +1,1 @@
+rm -rf simv* csrc *.log ucli.* *.vcd
