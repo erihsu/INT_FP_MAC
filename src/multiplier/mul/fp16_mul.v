@@ -28,7 +28,7 @@ module fp16_mul(a, b, c);
     assign mantissa_prod = multiplier_output[21:0] ;
     cla_nbit #(.n(5)) u2(a_exponent,b_exponent,1'b0,sum_exponent,c1);
     cla_nbit #(.n(5)) u3(sum_exponent, 5'b10001,1'b0,biased_sum_exponent,c2); // minus bias
-    normalizer u4(biased_sum_exponent,mantissa_prod,normalized_out);
+    mul_normalizer u4(biased_sum_exponent,mantissa_prod,normalized_out);
 
     assign c = (a_zero | b_zero) ? 16'b0 : {c_sign,normalized_out} ;
 

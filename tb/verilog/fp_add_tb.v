@@ -1,5 +1,5 @@
 // change to your absolute path
-`define PATTERN "/home/eric/INT_FP_MAC/utils/mul_fp16_golden_pattern.txt"
+`define PATTERN "/home/eric/INT_FP_MAC/utils/add_fp16_golden_pattern.txt"
 `define PATTERN_NUM 10
 module int_fp_mul_tb ();
 
@@ -12,8 +12,7 @@ reg [7:0] error_cnt;
 integer i;
 
 wire [15:0] result;
-wire underflow, overflow;
-fp16_mul u1 (input1,input2,result,underflow,overflow);
+fp16_add u1 (input1,input2,result);
 
 initial begin
     error_cnt = 0;

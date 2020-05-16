@@ -1,4 +1,4 @@
-module normalizer (exponent,mantissa_prod,result);
+module mul_normalizer (exponent,mantissa_prod,result);
 
 input [5:0] exponent;
 input [21:0] mantissa_prod;
