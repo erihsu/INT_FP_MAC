@@ -28,15 +28,13 @@ reg        [15:0] out_r ;
 wire              mac_en             ;       //MAC计算使能
 
 //加法
-wire              add_clk_w      ;
-wire              add_rst_w      ;
+
 wire              add_mode_w     ;
 wire       [15:0] add_a_w        ;
 wire       [15:0] add_b_w        ;      //加法输入暂取16位
 
 //乘法
-wire              mul_clk_w      ;
-wire              mul_rst_w      ;
+
 wire              mul_mode_w     ;
 wire       [15:0] mul_a_w        ;
 wire       [15:0] mul_b_w        ;
@@ -174,8 +172,8 @@ end
 
 add add(
 	.mode ( add_mode_w ) ,
-	.clk  (add_clk_w)    ,
-	.rst  (add_rst_w)    ,
+	.clk  ( clk      )   ,
+	.rst  ( rst_n    )   ,
 	.a    ( add_a_w  )   ,
 	.b    ( add_b_w  )   ,
 	.o    ( add_o_w  )   ,
@@ -185,8 +183,8 @@ add add(
 
 mul mul(
 	.mode ( mul_mode_w ) ,
-	.clk  (mul_clk_w)    ,
-	.rst  (mul_rst_w)    ,
+	.clk  (clk       )   ,
+	.rst  (rst_n     )   ,
 	.a    ( mul_a_w  )   ,
 	.b    ( mul_b_w  )   ,
 	.o    ( mul_o_w  )   ,
