@@ -28,14 +28,12 @@ reg        [15:0] out_r ;
 wire              mac_en             ;       //MAC计算使能
 
 //加法
-
-wire              add_mode_w     ;
+wire              add_clk_w      ;
 wire       [15:0] add_a_w        ;
 wire       [15:0] add_b_w        ;      //加法输入暂取16位
 
 //乘法
-
-wire              mul_mode_w     ;
+wire              mul_clk_w      ;
 wire       [15:0] mul_a_w        ;
 wire       [15:0] mul_b_w        ;
 
@@ -56,19 +54,19 @@ parameter CONF   = 3'b100 ;
 //---------------------------------------------------------
 //   assign
 //---------------------------------------------------------
-assign mac_en   = in_valid_a && in_valid_b && conf_down        ;
+assign mac_en     = in_valid_a && in_valid_b && conf_down        ;
 
 assign mul_mode_w = float_int                                  ;
-assign mul_a_w  = in_a                                         ;
-assign mul_b_w  = in_b                                         ;
+assign mul_a_w    = in_a                                         ;
+assign mul_b_w    = in_b                                         ;
 
 
-assign add_mode_w   = mul_o_w && ( ! float_int )               ;    //加法必须在乘法结束后进行
+assign add_mode_w = mul_o_w && ( ! float_int )               ;    //加法必须在乘法结束后进行
 assign add_a_w    = mul_c_w                                    ;
 assign add_b_w    = out_r                                      ;
 
-assign out_valid      = over_r ;
-assign mac_out        = out_r ;
+assign out_valid  = over_r ;
+assign mac_out    = out_r ;
 //---------------------------------------------------------
 //   FSM
 //---------------------------------------------------------
@@ -119,7 +117,7 @@ end
 //---------------------------------------------------------
 //   CONF
 //---------------------------------------------------------
-always@(posedge clk )
+always@(posedge clk or negedge rst_n)
    if(!rst_n) begin
         cnt_num   <= 'b0 ;
 		mode      <= 'b0 ;
@@ -135,7 +133,7 @@ always@(posedge clk )
 //---------------------------------------------------------
 //   counter
 //---------------------------------------------------------	
-always@(negedge clk)
+always@(negedge clk or negedge rst_n)
 begin
 	if(!rst_n) begin
 		counter <= 'b0 ;
@@ -183,12 +181,12 @@ add add(
 
 mul mul(
 	.mode ( mul_mode_w ) ,
-	.clk  (clk       )   ,
-	.rst  (rst_n     )   ,
-	.a    ( mul_a_w  )   ,
-	.b    ( mul_b_w  )   ,
-	.o    ( mul_o_w  )   ,
-	.c    ( mul_c_w  )
+	.clk  ( clk        ) ,
+	.rst  ( rst_n      ) ,
+	.a    ( mul_a_w    ) ,
+	.b    ( mul_b_w    ) ,
+	.o    ( mul_o_w    ) ,
+	.c    ( mul_c_w    )
 );
 
 endmodule	
