@@ -12,8 +12,7 @@ reg [7:0] error_cnt;
 integer i;
 
 wire [15:0] result;
-wire underflow, overflow;
-fp16_mul u1 (input1,input2,result,underflow,overflow);
+fp16_mul u1 (input1,input2,result);
 
 initial begin
     error_cnt = 0;
