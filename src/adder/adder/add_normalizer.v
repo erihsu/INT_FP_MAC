@@ -45,8 +45,8 @@ end
 always @(*) begin
     result[15] = sign;
     if (!if_sub) begin
-        result[14:10] = exponent + 1'b1;
-        result[9:0] = mantissa_add[9:0] ;
+        result[14:10] = (c1) ? exponent + 1'b1 : exponent;
+        result[9:0] = (c1) ? mantissa_add[9:0]>>1 : mantissa_add[9:0] ;
     end else begin 
         result[14:10] = shift_left_exp;
         result[9:0] = norm_mantissa_add[9:0];
