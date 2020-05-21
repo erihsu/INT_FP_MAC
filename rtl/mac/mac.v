@@ -1,6 +1,6 @@
 module mac
-(input      signed [15:0] in_a 
-,input      signed [15:0] in_b 
+(input             [15:0] in_a 
+,input             [15:0] in_b 
 ,input                    clk 
 ,input                    rst_n         //低复位 
 //-----data_ready------------------------------------------
@@ -12,49 +12,33 @@ module mac
 ,input             [7:0]  data_num    //数据长度,最多256
 //-----out-------------------------------------------------
 ,output                   out_valid
-,output     signed [15:0] mac_out
+,output            [15:0] mac_out
 );
 
 //---------------------------------------------------------
 //   reg && wire
 //---------------------------------------------------------
 reg               conf_down          ;       //配置完成标志位
-reg        		  mode               ;
+reg        		    mode               ;
 reg        [2:0]  state_Next , state ;
 reg        [7:0]  counter ,  cnt_num ;       //counter计数，cnt_num表示配置的长度
-reg               over_r ;
-reg        [15:0] out_r ;
+
+reg        [15:0] out_r              ;       //加法输出结果缓存
+reg               over_r             ; 
 
 wire              mac_en             ;       //MAC计算使能
 
-//整形加法
-wire              add_int_en_w       ;
-wire       [15:0] add_int_a_w        ;
-wire       [15:0] add_int_b_w        ;      //加法输入暂取16位
-wire              add_int_o_w        ;
-wire       [15:0] add_int_c_w        ;      //整形输出结果采用16b??
-//整形乘法
-wire              mul_int_en_w       ;
-wire       [7:0]  mul_int_a_w        ;
-wire       [7:0]  mul_int_b_w        ;
-wire              mul_int_o_w        ;
-wire       [15:0] mul_int_c_w        ;  
-//浮点加法
-wire              add_float_en_w     ;
-wire       [15:0] add_float_a_w      ;
-wire       [15:0] add_float_b_w      ;
-wire              add_float_o_w      ;
-wire       [15:0] add_float_c_w      ;  
-//浮点乘法
-wire              mul_float_en_w     ;
-wire       [15:0] mul_float_a_w      ;
-wire       [15:0] mul_float_b_w      ;
-wire              mul_float_o_w      ;
-wire       [15:0] mul_float_c_w      ;   
+//加法
+wire              add_mode_w         ; 
+wire       [15:0] add_a_w            ;
+wire       [15:0] add_b_w            ;       //加法输入暂取16位
 
-wire              add_o_w            ;       //加法完成  
+//乘法
+wire              mul_mode_w         ; 
+wire       [15:0] mul_a_w            ;
+wire       [15:0] mul_b_w            ;
+
 wire       [15:0] add_c_w            ;       //加法结果 
-wire              mul_o_w            ;       //乘法完成
 wire       [15:0] mul_c_w            ;       //乘法结果
 
 //---------------------------------------------------------
@@ -69,32 +53,19 @@ parameter CONF   = 3'b100 ;
 //---------------------------------------------------------
 //   assign
 //---------------------------------------------------------
-assign mac_en         = in_valid_a && in_valid_b && conf_down        ;
+assign mac_en     = in_valid_a && in_valid_b && conf_down        ;
 
-assign mul_int_en_w   = mac_en && ( ! float_int )                    ;     
-assign mul_int_a_w    = in_a[7:0]                                    ;
-assign mul_int_b_w    = in_b[7:0]                                    ;
+assign mul_mode_w = float_int                                    ;
+assign mul_a_w    = in_a                                         ;
+assign mul_b_w    = in_b                                         ;
 
-assign mul_float_en_w = mac_en && float_int                          ;
-assign mul_float_a_w  = in_a                                         ;
-assign mul_float_b_w  = in_b                                         ;
+assign add_mode_w = float_int                                    ;
+assign add_a_w    = mul_c_w                                      ;
+assign add_b_w    = out_r                                        ;
 
-assign mul_o_w        = float_int ? mul_float_o_w : mul_int_o_w      ;    //乘法完成选择
-assign mul_c_w        = float_int ? mul_float_c_w : mul_int_c_w      ;    //乘法结果选择
+assign out_valid  = over_r 										 ;
+assign mac_out    = out_r 										 ;   
 
-assign add_int_en_w   = mul_o_w && mac_en && ( ! float_int )         ;    //加法必须在乘法结束后进行
-assign add_int_a_w    = mul_c_w                                      ;
-assign add_int_b_w    = out_r                                        ;
-
-assign add_float_en_w = mul_o_w && mac_en && float_int               ;
-assign add_float_a_w  = mul_c_w                                      ;
-assign add_float_b_w  = out_r                                        ;
-
-assign add_o_w        = float_int ? add_float_o_w : add_int_o_w      ;
-assign add_c_w        = float_int ? add_float_c_w : add_int_c_w      ;
-
-assign out_valid      = over_r ;
-assign mac_out        = out_r ;
 //---------------------------------------------------------
 //   FSM
 //---------------------------------------------------------
@@ -145,7 +116,7 @@ end
 //---------------------------------------------------------
 //   CONF
 //---------------------------------------------------------
-always@(posedge clk )
+always@(posedge clk or negedge rst_n)
    if(!rst_n) begin
         cnt_num   <= 'b0 ;
 		mode      <= 'b0 ;
@@ -161,7 +132,7 @@ always@(posedge clk )
 //---------------------------------------------------------
 //   counter
 //---------------------------------------------------------	
-always@(negedge clk)
+always@(negedge clk or negedge rst_n)
 begin
 	if(!rst_n) begin
 		counter <= 'b0 ;
@@ -179,10 +150,10 @@ end
 //---------------------------------------------------------	
 always @ ( posedge clk or negedge rst_n ) begin
 	if ( ! rst_n ) begin
-		over_r <= 'b0 ;
-		out_r  <= 'd0 ;
+		over_r   <= 'b0 ;
+		out_r    <= 'd0 ;
 	end else if ( mac_en ) begin
-		if ( add_o_w ) begin
+		if ( counter==cnt_num ) begin
 			over_r <= 1'b1    ;
 			out_r  <= add_c_w ;
 		end else begin
@@ -195,41 +166,23 @@ always @ ( posedge clk or negedge rst_n ) begin
 	end 
 end 
 
-
-add_int add_int(
-	.en ( add_int_en_w ),
-	.a  ( add_int_a_w  ),
-	.b  ( add_int_b_w  ),
-	.o  ( add_int_o_w  ),
-	.c  ( add_int_c_w  )
-);
-
-add_float add_float(
-	.en ( add_float_en_w ),
-	.a  ( add_float_a_w  ),
-	.b  ( add_float_b_w  ),
-	.o  ( add_float_o_w  ),
-	.c  ( add_float_c_w  )
-);
-
-mul_int mul_int(
-	.en ( mul_int_en_w ),
-	.a  ( mul_int_a_w  ),
-	.b  ( mul_int_b_w  ),
-	.o  ( mul_int_o_w  ),
-	.c  ( mul_int_c_w  )
-);
-
-mul_float mul_float(
-	.en ( mul_float_en_w ),
-	.a  ( mul_float_a_w  ),
-	.b  ( mul_float_b_w  ),
-	.o  ( mul_float_o_w  ),
-	.c  ( mul_float_c_w  )
+int_fp_add add(
+	.mode ( add_mode_w ) ,
+	.clk  ( clk        ) ,
+	.rst  ( rst_n      ) ,
+	.a    ( add_a_w    ) ,
+	.b    ( add_b_w    ) ,
+	.c    ( add_c_w    )
 );
 
 
+int_fp_mul mul(
+	.mode ( mul_mode_w ) ,
+	.clk  ( clk        ) ,
+	.rst  ( rst_n      ) ,
+	.a    ( mul_a_w    ) ,
+	.b    ( mul_b_w    ) ,
+	.c    ( mul_c_w    )
+);
 
 endmodule	
-	
-	

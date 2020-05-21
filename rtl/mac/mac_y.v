@@ -30,7 +30,7 @@ wire              mac_en             ;       //MAC计算使能
 //加法
 wire              add_clk_w      ;
 wire       [15:0] add_a_w        ;
-wire       [15:0] add_b_w        ;      //加法输入暂取16位
+wire       [15:0] add_b_w        ;           //加法输入暂取16位
 
 //乘法
 wire              mul_clk_w      ;

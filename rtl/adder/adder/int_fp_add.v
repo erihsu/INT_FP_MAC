@@ -1,4 +1,4 @@
-module int_fp_add (mode,clk,rst,a,b,c)
+module int_fp_add (mode,clk,rst,a,b,c);
 
     input mode,clk,rst;
     input [15:0] a,b;
@@ -69,6 +69,7 @@ always @(posedge clk) begin
     end else begin
         adder_input_1_reg <= a[7:0];
         adder_input_2_reg <= b[7:0];
+    end
 end
 
 always @(posedge clk) begin
@@ -88,6 +89,7 @@ always @(posedge clk) begin
         result <= normalized_out;
     end else begin
         result <= adder_output;
+    end
 end
 
 // align small number

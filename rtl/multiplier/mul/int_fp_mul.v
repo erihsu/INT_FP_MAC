@@ -1,4 +1,4 @@
-module int_fp_add (mode,clk,rst,a,b,c)
+module int_fp_mul (mode,clk,rst,a,b,c);
 
     input mode,clk,rst;
     input [15:0] a,b;
@@ -15,7 +15,7 @@ module int_fp_add (mode,clk,rst,a,b,c)
 
     assign a_zero = ~(|a);
     assign b_zero = ~(|b);
-    assign c_sign = a_sign ^ b_sign;
+    assign c_sign = a[15] ^ b[15];
     assign multiplier_input1 = multiplier_input1_reg;
     assign multiplier_input2 = multiplier_input2_reg;
 
@@ -35,6 +35,7 @@ always @(posedge clk) begin
     end else begin 
         multiplier_input1 <= {8'b0,a[7:0]};
         multiplier_input2 <= {8'b0,b[7:0]};
+    end
 
 end
 
@@ -45,6 +46,7 @@ always @(posedge clk) begin
         result <= (a_zero | b_zero) ? 16'b0 : {c_sign,normalized_out};
     end else begin
         result <= multiplier_output[15:0];
+    end
 end
 
 

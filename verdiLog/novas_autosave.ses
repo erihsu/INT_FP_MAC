@@ -1,0 +1,61 @@
+@verdi rc file Version 1.0
+[General]
+VerdiVersion = Verdi3_K-2015.09-SP1-1
+[KeyNote]
+Line1 = Automatic Backup 0
+[TestBench]
+ConstrViewShow = 0
+InherViewShow = 0
+FSDBMsgShow = 0
+AnnotationShow = 0
+[hb]
+viewport = 473 159 599 552 195 442 163 798
+activeNode = "mac_tb"
+activeScope = "mac_tb"
+activeFile = "./rtl/mac/mac_tb.v"
+interactiveMode = False
+viewType = Source
+simulatorMode = False
+sourceBeginLine = 13
+baMode = False
+srcLineNum = True
+syncSignal = False
+traceMode = Hierarchical
+showTraceInSchema = True
+paMode = False
+funcMode = False
+traceCrossHier = True
+DnDtraceCrossHierOnly = True
+traceIncTopPort = False
+leadingZero = False
+signalPane = False
+Scope1 = "mac_tb"
+multipleSelection = 1 13 2 0 0
+sdfCheckUndef = FALSE
+[hb.sourceTab.1]
+scope = mac_tb
+File = /home/IC/workspae/MAC/INT_FP_MAC/rtl/mac/mac_tb.v
+Line = 14
+[imp.design1]
+dbEnum =  oh
+invokeDir = /home/IC/workspae/MAC/INT_FP_MAC
+design = DebussyLib
+hostCommand = hostCommand -f rtl.lst -sv
+[wave.0]
+viewPort = 0 28 800 86 100 65
+Empty = /home/IC/workspae/MAC/INT_FP_MAC/verdiLog/novas_autosave.ses.wave.0
+displayGrid = FALSE
+hierarchicalName = FALSE
+snap = TRUE
+displayLeadingZeros = FALSE
+fixDelta = FALSE
+displayCursorMarker = FALSE
+autoUpdate = FALSE
+highlightGlitchs = FALSE
+waveformSync = FALSE
+displayErrors = TRUE
+displayMsgSymbols = TRUE
+showMsgDescriptions = TRUE
+autoFit = FALSE
+displayDeltaY = FALSE
+centerCursor = FALSE
