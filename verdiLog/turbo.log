@@ -1,3 +1,0 @@
-Command Line: /opt/Synopsys/Verdi2015/platform/LINUXAMD64/bin/Novas -f rtl.lst -sv -ssf system.fsdb
-uname(Linux IC 2.6.32-573.el6.x86_64 #1 SMP Wed Jul 1 18:23:37 EDT 2015 x86_64)
-au time 90.967381 11.413265 8.881650 delta 195674112 195674112 total 570810368 570810368
