@@ -6,11 +6,15 @@ module int_fp_mul (mode,clk,rst,a,b,c);
 
 
     wire c_sign,a_zero,b_zero;
+    wire [4:0] sum_exponent, biased_sum_exponent;
     wire [15:0] multiplier_input1,multiplier_input2;
 
     reg [15:0] multiplier_input1_reg,multiplier_input2_reg;
 
     reg [15:0] result;
+    wire [31:0] multiplier_output;
+    wire [14:0] normalized_out;
+    wire [21:0] mantissa_prod;
 
 
     assign a_zero = ~(|a);
@@ -21,20 +25,20 @@ module int_fp_mul (mode,clk,rst,a,b,c);
 
     mul16x16 u1(multiplier_input1,multiplier_input2,multiplier_output);
     assign mantissa_prod = multiplier_output[21:0] ;
-    cla_nbit #(.n(5)) u2(a_exponent,b_exponent,1'b0,sum_exponent,c1);
+    cla_nbit #(.n(5)) u2(a[14:10],b[14:10],1'b0,sum_exponent,c1); // add exponent
     cla_nbit #(.n(5)) u3(sum_exponent, 5'b10001,1'b0,biased_sum_exponent,c2); // minus bias
     mul_normalizer u4(biased_sum_exponent,mantissa_prod,normalized_out);
 
 always @(posedge clk) begin
     if(!rst) begin 
-        multiplier_input1 <= 0;
-        multiplier_input2 <= 0;
+        multiplier_input1_reg <= 0;
+        multiplier_input2_reg <= 0;
     end else if(mode) begin 
-        multiplier_input1 <= {5'b0,1'b1,a[9:0]};
-        multiplier_input2 <= {5'b0,1'b1,b[9:0]};
+        multiplier_input1_reg <= {5'b0,1'b1,a[9:0]};
+        multiplier_input2_reg <= {5'b0,1'b1,b[9:0]};
     end else begin 
-        multiplier_input1 <= {8'b0,a[7:0]};
-        multiplier_input2 <= {8'b0,b[7:0]};
+        multiplier_input1_reg <= {8'b0,a[7:0]};
+        multiplier_input2_reg <= {8'b0,b[7:0]};
     end
 
 end

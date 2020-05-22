@@ -14,6 +14,8 @@ module int_fp_add (mode,clk,rst,a,b,c);
 
     wire [15:0] normalized_out;
 
+    wire [14:0] bigger, smaller;
+    wire [10:0] normalizer_input;
     reg [14:0] bigger_reg,smaller_reg;
     reg [10:0] aligned_small_reg,adder_input_1_reg,adder_input_2_reg,adder_output_reg;
     reg [15:0] result;

@@ -1,10 +1,10 @@
 module mul_normalizer (exponent,mantissa_prod,result);
 
-input [5:0] exponent;
+input [4:0] exponent;
 input [21:0] mantissa_prod;
 output [14:0] result;
 
-wire [5:0] result_exponent;
+wire [4:0] result_exponent;
 wire [9:0] result_mantissa;
 
 assign result_exponent = (mantissa_prod[21]) ? (exponent + 1'b1): exponent;
