@@ -2,4 +2,4 @@ simv.daidir/
 simv
 *.log
 *.vcd
-
+direct_test*
