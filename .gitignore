@@ -2,4 +2,5 @@ simv.daidir/
 simv
 *.log
 *.vcd
-direct_test*
+tb/verilog/
+sim/
