@@ -86,6 +86,8 @@ def generate_fp16_add_golden():
 if __name__ == "__main__":
     generate_fp16_mul_golden()
     generate_fp16_add_golden()
+    generate_int8_mul_golden()
+    generate_int8_add_golden()
 
 
 
