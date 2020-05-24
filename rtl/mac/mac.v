@@ -169,7 +169,7 @@ end
 int_fp_add add(
 	.mode ( add_mode_w ) ,
 	.clk  ( clk        ) ,
-	.rst  ( rst_n      ) ,
+	.rst_n( rst_n      ) ,
 	.a    ( add_a_w    ) ,
 	.b    ( add_b_w    ) ,
 	.c    ( add_c_w    )
@@ -179,7 +179,7 @@ int_fp_add add(
 int_fp_mul mul(
 	.mode ( mul_mode_w ) ,
 	.clk  ( clk        ) ,
-	.rst  ( rst_n      ) ,
+	.rst_n( rst_n      ) ,
 	.a    ( mul_a_w    ) ,
 	.b    ( mul_b_w    ) ,
 	.c    ( mul_c_w    )
