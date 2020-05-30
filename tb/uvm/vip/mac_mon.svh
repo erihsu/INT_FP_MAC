@@ -3,28 +3,37 @@
 
 class mac_monitor extends uvm_monitor;
 
-    uvm_analysis_port#(mac_tr) ap;
-    `uvm_component_utils(mac_monitor)
-    mac_output_if mac_if;
+  uvm_analysis_port #(mac_tr) ap;
+  `uvm_component_utils(mac_monitor)
 
-    function new(string name, uvm_component parent = null);
-        super.new(name, parent);
-        ap = new("ap", this);
-    endfunction  
+  virtual mac_if mif;
 
-    virtual function void build_phase(uvm_phase phase);
-        if (!uvm_config_db#(mac_output_if)::get(this, "","mac_if",mac_if)) begin
-            `uvm_fatal(get_full_name(),"No virtual interface found");
-        end 
-    endfunction
+  function new(string name, uvm_component parent = null);
+    super.new(name, parent);
+    ap = new("ap", this);
+  endfunction
 
-    virtual protected task run_phase(uvm_phase phase);
-        forever begin 
-            mac_tr_out tr;
-            tr = mac_tr_out::type_id::create("tr",,get_full_name());
-            ap.write(tr);
-        end
+  virtual function void build_phase(uvm_phase phase);
+    if (!uvm_config_db #(virtual mac_if)::get(this, "", "vif", mif)) begin
+      `uvm_fatal(get_full_name(), "No virtual interface found");
+    end
+  endfunction
+
+  virtual protected task run_phase(uvm_phase phase);
+
+    mac_tr tr = mac_tr::type_id::create("tr", this);
+
+    forever begin
+      tr.a = mif.monitor.a;
+      tr.b = mif.monitor.b;
+      tr.c = mif.monitor.c;
+      tr.clear = mif.monitor.clear;
+      tr.mode = mif.monitor.mode;
+
+      @(mif.clk) ap.write(tr);
+    end
+  endtask
 
 endclass
 
-`endif /* MAC_MON_SVH */
+`endif  /* MAC_MON_SVH */

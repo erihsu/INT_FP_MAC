@@ -1,27 +1,31 @@
 `ifndef MAC_IF_SV
 `define MAC_IF_SV
 
-interface mac_input_if (input bit clk,
-                            input wire [15:0] a,b,
-                            input wire valid_a,valid_b);
+interface mac_if (
+    input logic clk
+);
 
-endinterface: mac_input_if
+  wire [15:0] a, b, c;
+  wire clear, mode;
 
-interface mac_output_if (input bit clk,
-                             output wire [15:0] c,
-                             output wire valid_c);
+  clocking mck @(posedge clk);
+    input a, b, clear, mode;
+    output c;
+  endclocking
 
-endinterface: mac_output_if
+  clocking sck @(posedge clk);
+    output a, b, clear, mode;
+    input c;
+  endclocking
 
-interface mac_if (input bit clk,
-                    input wire [15:0] a,b,
-                    output wire [15:0] c,
-                    input wire valid_a, valid_b,
-                    output wire valid_c);
+  clocking monck @(posedge clk);
+    output a, b, clear, mode, c;
+  endclocking
 
-mac_input_if mac_if_i(clk,a,b,valid_a,valid_b);
-mac_output_if mac_if_o(clk,c,valid_c);
+  modport monitor(output a, b, clear, mode, c);
+  modport master(input a, b, clear, mode, output c);
+  modport slave(output a, b, clear, mode, input c);
 
-endinterface: mac_if
+endinterface : mac_if
 
-`endif /* MAC_IF_SV */
+`endif  /* MAC_IF_SV */
