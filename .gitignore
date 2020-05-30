@@ -2,5 +2,5 @@ simv.daidir/
 simv
 *.log
 *.vcd
-tb/verilog/
-sim/
+.vscode/
+syn/
