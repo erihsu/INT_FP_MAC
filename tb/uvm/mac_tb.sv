@@ -1,13 +1,10 @@
 `include "mac_xzy.v"
-
-
 `include "mac_agent_pkg.sv"
+
 import mac_agent_pkg::*;
 import uvm_pkg::*;
 
-module mac_tb;
-
-
+module mac_tb();
 
   `include "mac_scoreboard.sv"
   `include "mac_env.sv"
@@ -19,11 +16,14 @@ module mac_tb;
 
   mac_if mif(clk);
 
-  mac dut(
+  mac_xzy dut(
         .clk(clk),
         .rst_n(rst_n),
-        .clear(mif.clear),
-        .float_int(mif.mode),
+        .enable(mif.en),
+        .valid(mif.vld),
+        .read(mif.rd),
+        .mode(mif.mode),
+        .cfg(mif.cfg),
         .in_a(mif.a),
         .in_b(mif.b),
         .mac_out(mif.c)
@@ -50,10 +50,10 @@ module mac_tb;
     run_test("base_test");
   end
 
-  initial begin
+  // initial begin
 
-    #60ns
-    $finish;
-  end
+  //   #400ns;
+  //   $finish;
+  // end
 
 endmodule

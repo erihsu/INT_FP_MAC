@@ -18,23 +18,30 @@ class mac_driver extends uvm_driver #(mac_tr);
     end
   endfunction
 
-  virtual task run_phase(uvm_phase phase);
+  task run_phase(uvm_phase phase);
     mac_tr tr;
-    fork
+    fork 
+      begin
       forever begin
 
         seq_item_port.get_next_item(tr);
 
         `uvm_info("DRIVER", "Sending mac_transaction", UVM_MEDIUM);
-        mif.slave.a = tr.a;
-        mif.slave.b = tr.b;
-        mif.slave.mode = tr.mode;
-        mif.slave.clear = tr.clear;
-        @(mif.clk);
-        tr.c    = mif.slave.c;
+
+        
+        mif.sck.a <= tr.a;
+        mif.sck.b <= tr.b;
+        mif.sck.en <= tr.en;
+        mif.sck.vld <= tr.vld;
+        mif.sck.rd <= tr.rd;
+        mif.sck.mode <= tr.mode;
+        mif.sck.cfg <= tr.cfg;
+        @(mif.sck);
+        tr.c = mif.sck.c;
 
         seq_item_port.item_done();
       end
+    end
     join_none
   endtask
 
