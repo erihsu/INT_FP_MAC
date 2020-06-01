@@ -30,8 +30,8 @@ def generate_fp16_mul_golden():
     golden_list_dec = ""
 
     for _ in range(10):
-        a = random.uniform(-20,20)
-        b = random.uniform(-20,20)
+        a = random.uniform(-1,1)
+        b = random.uniform(-1,1)
         expected = a*b
         a_bin =  bin(np.float16(a).view("H"))[2:].zfill(16)
         b_bin =  bin(np.float16(b).view("H"))[2:].zfill(16)
@@ -52,8 +52,8 @@ def generate_int8_add_golden():
         a = random.randint(-127,128)
         b = random.randint(-127,128)
         expected = a+b
-        a_bin = np.binary_repr(a,width=8).zfill(16)
-        b_bin = np.binary_repr(b,width=8).zfill(16)
+        a_bin = np.binary_repr(a,width=16).zfill(16)
+        b_bin = np.binary_repr(b,width=16).zfill(16)
         expected_bin = np.binary_repr(expected,width=16)
         golden_list += "{}_{}_{}_0\n".format(a_bin,b_bin,expected_bin)
         golden_list_dec += "{}(int8) + {}(int8) = {}(int8)\n".format(a,b,expected)
