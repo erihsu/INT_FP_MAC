@@ -1,4 +1,4 @@
-`define PATTERN "/home/eric/INT_FP_MAC/utils/mul_int8_golden_pattern.txt"
+`define PATTERN "/home/eric/INT_FP_MAC/utils/mul_fp16_golden_pattern.txt"
 `define PATTERN_NUM 10
 module int_fp_mul_tb ();
 
@@ -13,7 +13,7 @@ integer i;
 
 wire [15:0] result;
 wire underflow, overflow;
-int_fp_mul u1 (mode,clk,reset,input1,input2,result);
+int_fp_mul u1 (mode,input1,input2,result);
 
 initial begin
     error_cnt = 0;

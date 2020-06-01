@@ -13,7 +13,7 @@ integer i;
 
 wire [15:0] result;
 wire underflow, overflow;
-int_fp_add u1 (mode,clk,reset,input1,input2,result);
+int_fp_add u1 (mode,input1,input2,result);
 
 initial begin
     error_cnt = 0;
