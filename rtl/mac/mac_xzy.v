@@ -1,65 +1,90 @@
-// 3 cycle for fp16 to get result and 2 cycle for int8 to get result
 
 
-module mac
+// Timing
+
+//  clk      __|--|__|--|__|--|__|--|__|--|__|--|__|--|__|--|__|--|__|--|__|
+//  enable   ________|-----------------------------------------------|_____
+//  valid    ______________|-----------------|____________________________
+//  read     ____________________________________________|----|___________
+//  config   _|----|_|xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx|_____
+//  in_a     ______________|abcde|abcde|abcde|____________________________
+//  in_b     ______________|abcde|abcde|abcde|____________________________
+//  mac_out  ____________________________________________|jklm|___________
+//  mode     _|----|______________________________________________________
+
+
+module mac_xzy
 (input                    clk 
 ,input                    rst_n        // asynchronous reset
-,input 					  clear  // synchronous clear
-,input                    float_int   //数据类型1:fp,0:int
+,input					  enable
+,input 					  valid
+,input 					  read   // write:1 == write behave  ;  write:0 == read behave
+,input                    mode   // 1:fp,0:int
+,input					  cfg
 ,input             [15:0] in_a 
 ,input             [15:0] in_b 
 ,output            [15:0] mac_out
 );
 
-reg        [15:0] out_r              ;       //加法输出结果缓存
-reg 			 error_r			 ;
+reg [15:0] a_reg,b_reg, mul_out_reg,mac_out_reg;
+reg mode_reg;
 
-//加法
-wire       [15:0] add_a_w            ;
-wire       [15:0] add_b_w            ;       //加法输入暂取16位
+wire 		[15:0] mul_out;
+wire       [15:0] add_out;
+wire       [15:0] add_in_1, add_in_2;
+wire [15:0] a,b;
 
-//乘法
-wire       [15:0] mul_a_w            ;
-wire       [15:0] mul_b_w            ;
 
-wire       [15:0] add_c_w            ;       //加法结果 
-wire       [15:0] mul_c_w            ;       //乘法结果
+assign mac_out =  (enable & ~valid & read) ? mac_out_reg : 16'b0;
 
-assign mac_out =  out_r;
+assign add_in_2 = mac_out_reg;
+assign add_in_1 = mul_out_reg;
 
-assign add_a_w =  mul_c_w;
-assign add_b_w =  out_r;
+assign a = a_reg;
+assign b = b_reg;
+
+
+assign float_int = mode_reg;
 
 //---------------------------------------------------------
 //   MAC
 //---------------------------------------------------------	
 always @ ( posedge clk or posedge rst_n ) begin
 	if ( ! rst_n ) begin
-		out_r    <= 'd0 ;
-	end else if(clear) begin
-		out_r   <= 'd0 ;
-	end else begin
-		out_r    <= add_c_w ;
+		a_reg    <= 'd0 ;
+		b_reg    <= 'd0 ;
+		mul_out_reg <= 'd0;
+		mac_out_reg <= 'd0;
+		mode_reg <= 'd0;
+	end else if(enable) begin
+		mul_out_reg <= mul_out ;
+		mac_out_reg <= add_out ;
+		if (valid) begin 
+			a_reg   <= in_a ;
+			b_reg   <= in_b ;
+
+		end else begin
+			a_reg   <= 'd0 ;
+			b_reg   <= 'd0 ;
+		end
+	end else if (cfg) begin
+		mode_reg <= mode;
 	end 
 end 
 
 int_fp_add add(
 	.mode ( float_int  ) ,
-	.clk  ( clk        ) ,
-	.rst_n( rst_n      ) ,
-	.a    ( add_a_w    ) ,
-	.b    ( add_b_w    ) ,
-	.c    ( add_c_w    )
+	.a    ( add_in_1    ) ,
+	.b    ( add_in_2    ) ,
+	.c    ( add_out    )
 );
 
 
 int_fp_mul mul(
 	.mode ( float_int  ) ,
-	.clk  ( clk        ) ,
-	.rst_n( rst_n      ) ,
-	.a    ( mul_a_w    ) ,
-	.b    ( mul_b_w    ) ,
-	.c    ( mul_c_w    )
+	.a    ( a    ) ,
+	.b    ( b    ) ,
+	.c    ( mul_out    )
 );
 
 endmodule	
