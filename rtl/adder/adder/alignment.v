@@ -11,7 +11,7 @@ assign smaller_exponent = smaller[14:10];
 
 cla_nbit #(.n(5)) u1(bigger_exponent,~smaller_exponent+1'b1,1'b0,shift_bits,c1);
 
-assign aligned_small = {1'b1,smaller[9:0]} >> shift_bits;
+assign aligned_small = ({1'b1,smaller[9:0]} >> shift_bits);
 
 
 endmodule

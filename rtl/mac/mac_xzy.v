@@ -1,4 +1,5 @@
-
+// Version: 1.0
+// Description: No pipelined MAC(Multiplier accumulator)
 
 // Timing
 
@@ -11,7 +12,6 @@
 //  in_b     ______________|abcde|abcde|abcde|____________________________
 //  mac_out  ____________________________________________|jklm|___________
 //  mode     _|----|______________________________________________________
-
 
 module mac_xzy
 (input                    clk 
@@ -38,7 +38,6 @@ wire [15:0] a,b;
 assign mac_out =  (enable & ~valid & read) ? mac_out_reg : 16'b0;
 
 assign add_in_2 = mac_out_reg;
-assign add_in_1 = mul_out_reg;
 
 assign a = a_reg;
 assign b = b_reg;
@@ -53,11 +52,9 @@ always @ ( posedge clk or posedge rst_n ) begin
 	if ( ! rst_n ) begin
 		a_reg    <= 'd0 ;
 		b_reg    <= 'd0 ;
-		mul_out_reg <= 'd0;
 		mac_out_reg <= 'd0;
 		mode_reg <= 'd0;
 	end else if(enable) begin
-		mul_out_reg <= mul_out ;
 		mac_out_reg <= add_out ;
 		if (valid) begin 
 			a_reg   <= in_a ;
@@ -74,7 +71,7 @@ end
 
 int_fp_add add(
 	.mode ( float_int  ) ,
-	.a    ( add_in_1    ) ,
+	.a    ( mul_out    ) ,
 	.b    ( add_in_2    ) ,
 	.c    ( add_out    )
 );
