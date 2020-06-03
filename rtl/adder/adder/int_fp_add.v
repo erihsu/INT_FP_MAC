@@ -15,6 +15,7 @@ module int_fp_add (mode,a,b,c);
     reg [14:0] bigger, smaller;
     reg a_larger_b;
 
+
     assign a_sign = a[15];
     assign b_sign = b[15];
 
