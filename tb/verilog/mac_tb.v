@@ -1,60 +1,52 @@
-`timescale 1ns/10ps
-//------------------------------------------------------
-// define 
-//------------------------------------------------------
-`define CYCLE     10
-
+`define PATTERN "/home/eric/INT_FP_MAC/utils/mac_fp16_golden_pattern.txt"
+`define PATTERN_NUM 10
 module mac_tb ;
 //------------------------------------------------------
 // reg && wire
 //------------------------------------------------------
-reg  [15:0] a ,b                       ; 
-reg         clk,reset                  ;
+reg  [15:0] a ,b, c                     ; 
 wire [15:0] mac_out                    ;
+reg [15:0] expected						;
+reg mode;
+reg [7:0] error_cnt;
 
-
-//------------------------------------------------------
-// clock generation
-//------------------------------------------------------
-always begin #(`CYCLE/2) clk=~clk ; end  
-
+reg [64:0] pattern [0:`PATTERN_NUM-1];
+integer i;
 
 initial begin
-	a         = 'b0 ;
-	b         = 'b0 ;
-	clk       = 'b0 ;
-	
-	@(negedge clk) reset=1'b0  ;
-		#(`CYCLE*2) reset=1'b1 ;
-		
-	@(negedge clk) ;
-		{a,b}={16'b0100000101001100,16'b1001011101100010} ;
-
-	#100;
-	$finish;
+    error_cnt = 0;
+    #30;
+    for(i=0;i<`PATTERN_NUM;i=i+1) begin
+        {a,b,c,expected,mode} = pattern[i];
+        #10;
+        $display("expected: %b actual:%b",expected,mac_out);
+        if (expected == mac_out) begin 
+            $display("Check PASSED");
+            $display("--------------------");
+        end else begin
+            error_cnt = error_cnt + 1;
+        end
+    end
+    #10;
+    $display("Total error count: %d",error_cnt);
+    #10;
+    $finish;
 end
 
-//------------------------------------------------------
-//  generate wave
-//------------------------------------------------------
 initial begin
    $dumpfile("mac.vcd");
    $dumpvars;
 end
 
-//------------------------------------------------------
-//  Instance sram 
-//------------------------------------------------------
-mac_xzy u0_mac
-(.clk              ( clk       )
-,.rst_n             ( reset         )
-,.enable              ( 1'b1       )
-,.valid        ( 1'b1 )
-,.read			(1'b0)
-,.mode (1'b0)
-,.cfg (1'b0)
-,.in_a         ( a  )
+initial begin 
+    $readmemb(`PATTERN,pattern);
+end
+
+mac_unit u0_mac
+(.in_a         ( a  )
 ,.in_b        ( b )
+,.in_c			(c)
+,.mode			(mode)
 ,.mac_out          ( mac_out   )
 );
 

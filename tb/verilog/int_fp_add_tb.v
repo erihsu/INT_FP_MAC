@@ -7,12 +7,10 @@ reg [15:0] expected;
 reg mode;
 reg [48:0] pattern [0:`PATTERN_NUM-1];
 reg [7:0] error_cnt;
-reg clk,reset;
 
 integer i;
 
 wire [15:0] result;
-wire underflow, overflow;
 int_fp_add u1 (mode,input1,input2,result);
 
 initial begin
@@ -34,20 +32,7 @@ initial begin
     #10;
     $finish;
 end
-    
-initial begin 
-    clk = 0;
-    forever begin
-       #5 clk = ~clk;
-    end
-end 
-initial begin 
-    reset = 1'b1;
-    #15;
-    reset = 1'b0;
-    #10
-    reset = 1'b1;
-end
+
 initial begin 
     $dumpfile("int_fp_add.vcd");
     $dumpvars;
