@@ -26,7 +26,8 @@ module mac_tb();
         .cfg(mif.cfg),
         .in_a(mif.a),
         .in_b(mif.b),
-        .mac_out(mif.c)
+        .mac_out(mif.c),
+        .error(mif.error)
     );
 
   initial begin

@@ -3,7 +3,7 @@
 
 class mac_monitor extends uvm_monitor;
 
-  uvm_analysis_port #(mac_tr) ap;
+  uvm_analysis_port #(monitor_item) ap;
   `uvm_component_utils(mac_monitor)
 
   virtual mac_if mif;
@@ -23,11 +23,12 @@ class mac_monitor extends uvm_monitor;
 
   task run_phase(uvm_phase phase);
 
-    mac_tr tr = mac_tr::type_id::create("tr", this);
+   
 
   `uvm_info("MON","Monitor data",UVM_LOW)
     forever begin    
-
+      monitor_item tr = monitor_item::type_id::create("tr", this);
+      @(mif.pck);
       tr.a = mif.pck.a;
       tr.b = mif.pck.b;
       tr.c = mif.pck.c;
@@ -36,7 +37,7 @@ class mac_monitor extends uvm_monitor;
       tr.rd = mif.pck.rd;
       tr.mode = mif.pck.mode;
       tr.cfg = mif.pck.cfg;
-      @(mif.pck);
+      tr.error = mif.pck.error;
       ap.write(tr);
     end
   endtask

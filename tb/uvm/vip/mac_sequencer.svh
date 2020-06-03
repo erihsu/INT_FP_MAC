@@ -1,5 +1,5 @@
 
-class mac_sequencer extends uvm_sequencer #(mac_tr);
+class mac_sequencer extends uvm_sequencer #(mac_int8);
 
   `uvm_component_utils(mac_sequencer)
 

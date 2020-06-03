@@ -6,7 +6,7 @@ class base_test extends uvm_test;
 
   `uvm_component_utils(base_test);
 
-  mac_fp16_short a_seq;
+  mac_sequence a_seq;
   mac_sequencer sequencer_h;
 
   function new(string name = "base_test", uvm_component parent = null);
@@ -30,7 +30,6 @@ class base_test extends uvm_test;
     a_seq = new("a_seq");
     phase.raise_objection(this, "base_test");
     a_seq.start(sequencer_h);
-    #2ns;
     phase.drop_objection(this, "base_test");
   endtask
 

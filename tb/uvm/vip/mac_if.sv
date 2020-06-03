@@ -6,20 +6,20 @@ interface mac_if (
 );
 
   wire [15:0] a, b, c;
-  wire en, vld, rd, mode, cfg;
+  wire en, vld, rd, mode, cfg,error;
 
   clocking mck @(posedge clk);
     input a,b,en,vld,rd,mode,cfg;
-    output c;
+    output c,error;
   endclocking
 
   clocking sck @(posedge clk);
-    input c;
+    input c,error;
     output a,b,en,vld,rd,mode,cfg;
   endclocking
 
   clocking pck @(posedge clk);
-    input a,b,c,en,vld,rd,mode,cfg;
+    input a,b,c,en,vld,rd,mode,cfg,error;
   endclocking
 
   modport master(clocking mck);

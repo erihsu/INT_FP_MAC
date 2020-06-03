@@ -8,6 +8,6 @@ package mac_agent_pkg;
   `include "mac_drv.svh"
   `include "mac_mon.svh"
   `include "mac_agent.svh"
-  `include "mac_seqlib.svh"
+  `include "mac_sequence.svh"
 
 endpackage

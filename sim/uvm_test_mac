@@ -1,0 +1,13 @@
+vcs -full64 -R -l uvm_tb.log -sverilog -override_timescale=1ns/1ps \
+-ntb_opts uvm-1.2 \
+-y ../rtl/adder/cla \
+-y ../rtl/adder/adder \
+-y ../rtl/multiplier/vedic \
+-y ../rtl/multiplier/mul \
+-y ../rtl/mac \
++libext+.v \
++incdir+../tb/uvm/  \
++incdir+../tb/uvm/vip/ \
++incdir+../rtl/mac/ \
+../tb/uvm/mac_tb.sv \
+../tb/uvm/dpi/dpi_function.c
