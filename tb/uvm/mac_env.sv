@@ -15,10 +15,9 @@ class mac_env extends uvm_env;
   endfunction
 
   function void build_phase(uvm_phase phase);
-    mac_agt = mac_agent::type_id::create("mac_agt", this);
-    mac_scr = mac_scoreboard::type_id::create("mac_scr", this);
-    mac_sqr = mac_sequencer::type_id::create("mac_sqr", this);
-
+    mac_agt = factory_create_c(mac_agent,mac_agt);
+    mac_scr = factory_create_c(mac_scoreboard,mac_scr);
+    mac_sqr = factory_create_c(mac_sequencer,mac_sqr);
   endfunction : build_phase
 
   function void connect_phase(uvm_phase phase);

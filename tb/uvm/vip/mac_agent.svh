@@ -16,11 +16,11 @@ class mac_agent extends uvm_agent;
   endfunction
 
   virtual function void build_phase(uvm_phase phase);
-    sqr = mac_sequencer::type_id::create("sqr", this);
-    drv = mac_driver::type_id::create("drv", this);
-    mon = mac_monitor::type_id::create("mon", this);
+    sqr = factory_create_c(mac_sequencer,sqr);
+    drv = factory_create_c(mac_driver,drv);
+    mon = factory_create_c(mac_monitor,mon);
     if (!uvm_config_db #(virtual mac_if)::get(this, "", "vif", mif)) begin
-      `uvm_error(get_full_name, "No interface set for agent");
+      `uvm_fatal(get_full_name, "No interface set for agent");
     end
     uvm_config_db #(virtual mac_if)::set(this, "drv", "vif", mif);
     uvm_config_db #(virtual mac_if)::set(this, "mon", "vif", mif);

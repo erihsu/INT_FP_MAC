@@ -1,3 +1,6 @@
+`ifndef MAC_SEQUENCE_SVH 
+`define MAC_SEQUENCE_SVH
+
 //-----------base mac seq-------------------//
 class mac_sequence extends uvm_sequence #(mac_int8);
   `uvm_object_utils(mac_sequence)
@@ -6,19 +9,17 @@ class mac_sequence extends uvm_sequence #(mac_int8);
     super.new(name);
   endfunction
 
-  virtual task pre_start();
-    if(starting_phase != null)
-      starting_phase.raise_objection( this );
-  endtask: pre_start
-
   virtual task body();
-    `uvm_do(req);
-  endtask :body
 
-  virtual task post_start();
-    if (starting_phase != null )
-      starting_phase.drop_objection(this);
-  endtask : post_start
+    mac_int8 seq_item;
+    seq_item = factory_create_o(mac_int8,seq_item);
+    start_item(seq_item);
+    if (!seq_item.randomize()) `uvm_fatal("INT8_SEQ","randomize failed",UVM_LOW)
+    finish_item(seq_item);
+
+  endtask :body
 
 endclass : mac_sequence
 //--------------------------------------------//
+
+`endif /* MAC_SEQUENCE_SVH */
