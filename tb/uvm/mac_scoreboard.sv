@@ -1,6 +1,9 @@
 `ifndef MAC_SCOREBOARD_SV
 `define MAC_SCOREBOARD_SV
 
+`uvm_analysis_imp_decl(_port1)
+`uvm_analysis_imp_decl(_port2)
+
 typedef struct {bit sign; bit[6:0] value;} int8;
 typedef struct {bit sign; bit[14:0] value;} int16;
 typedef struct {int sign; int exp_sign; bit[3:0] exp; bit[9:0] mantis;} fp16;
@@ -14,8 +17,8 @@ import "DPI-C" function bit is_float_equal(input real a, b);
 class mac_scoreboard extends uvm_scoreboard;
   `uvm_component_utils(mac_scoreboard)
 
-  uvm_analysis_imp #(monitor1_item, mac_scoreboard) tr_mac_export1;
-  uvm_analysis_imp #(monitor2_item, mac_scoreboard) tr_mac_export2;
+  uvm_analysis_imp_port1 #(monitor1_item, mac_scoreboard) tr_mac_export1;
+  uvm_analysis_imp_port2 #(monitor2_item, mac_scoreboard) tr_mac_export2;
 
   int expected_int8,real_int8;
   real expected_fp16,real_fp16;
@@ -31,7 +34,7 @@ class mac_scoreboard extends uvm_scoreboard;
     tr_mac_export2 = new("tr_mac_export2", this);
   endfunction
 
-  function void write(monitor1_item data1, monitor2_item data2);
+  function void write_port1(monitor1_item data1);
 
     bit [15:0] a,b,c; 
 
@@ -53,11 +56,11 @@ class mac_scoreboard extends uvm_scoreboard;
 
     else if(data1.vld == 1'b1 && data1.rd == 1'b0) begin  //----------COMPUTE--------------------//
       `uvm_info("SCB","Entering compute",UVM_LOW);
-      if (data2.error == 1'b1) begin 
-        `uvm_info("SCB","Detected error,overflow or underflow",UVM_LOW);
-        invaid = 1'b1;
-      end 
-      else if (data1.mode == 1'b0) begin
+      // if (data2.error == 1'b1) begin 
+      //   `uvm_info("SCB","Detected error,overflow or underflow",UVM_LOW);
+      //   invaid = 1'b1;
+      // end 
+      if (data1.mode == 1'b0) begin
         `uvm_info("SCB","VALID compute",UVM_LOW);
         real_int8 += int8_mul(binary2int8(data1.a),binary2int8(data1.b));
       end 
@@ -67,38 +70,51 @@ class mac_scoreboard extends uvm_scoreboard;
       end
     end         //----------------END COMPUTE------------------------//
         
-    else if (data1.rd == 1'b1 && data1.vld == 1'b0) begin  //--------------READ and COMPARE----------------//
-      `uvm_info("SCB","Checking if match",UVM_LOW);
-      if (invaid == 1'b1) begin
-        `uvm_info("SCB","INVALID Result because of overflow or underflow",UVM_LOW);
-      end 
-      else if (data1.mode == 1'b0) begin
-        expected_int8 = int16_2_real(binary2int16(data2.c));
-        if (real_int8 != expected_int8) begin
-          `uvm_info("INT8",$sformatf("MISMATCH: %5d != %5d",real_int8,expected_int8),UVM_LOW);
-        end 
-        else 
-        begin 
-          `uvm_info("INT8",$sformatf("MATCH: %5d == %5d",real_int8,expected_int8),UVM_LOW);
-        end
-      end
-      else 
-      begin
-        expected_fp16 = fp16_2_real(binary2fp16(data2.c));
-        if (!is_float_equal(real_fp16, expected_fp16)) begin
-          `uvm_info("FP16",$sformatf("MISMATCH: %f != %f",real_fp16,expected_fp16),UVM_LOW);
-        end 
-        else 
-        begin
-          `uvm_info("FP16",$sformatf("MATCH: %f == %f",real_fp16,expected_fp16),UVM_LOW);
-        end
-      end
-    end           //------------END READ and COMPARE---------------------//
+    // else if (data1.rd == 1'b1 && data1.vld == 1'b0) begin  //--------------READ and COMPARE----------------//
+    //   `uvm_info("SCB","Checking if match",UVM_LOW);
+    //   // if (invaid == 1'b1) begin
+    //   //   `uvm_info("SCB","INVALID Result because of overflow or underflow",UVM_LOW);
+    //   // end 
+    //   if (data1.mode == 1'b0) begin
+    //     expected_int8 = int16_2_real(binary2int16(data2.c));
+    //     if (real_int8 != expected_int8) begin
+    //       `uvm_info("INT8",$sformatf("MISMATCH: %5d != %5d",real_int8,expected_int8),UVM_LOW);
+    //     end 
+    //     else 
+    //     begin 
+    //       `uvm_info("INT8",$sformatf("MATCH: %5d == %5d",real_int8,expected_int8),UVM_LOW);
+    //     end
+    //   end
+    //   else 
+    //   begin
+    //     expected_fp16 = fp16_2_real(binary2fp16(data2.c));
+    //     if (!is_float_equal(real_fp16, expected_fp16)) begin
+    //       `uvm_info("FP16",$sformatf("MISMATCH: %f != %f",real_fp16,expected_fp16),UVM_LOW);
+    //     end 
+    //     else 
+    //     begin
+    //       `uvm_info("FP16",$sformatf("MATCH: %f == %f",real_fp16,expected_fp16),UVM_LOW);
+    //     end
+    //   end
+    // end           //------------END READ and COMPARE---------------------//
     
     else 
     begin   //-------------NOP during enable---------------------//
       `uvm_info("SCB","NOP",UVM_LOW);
     end     //--------------END NOP----------------------//
+
+  endfunction
+
+  function void write_port2(monitor2_item data2);
+
+      if (data2.error == 1'b1) begin 
+        `uvm_info("SCB","Detected error,overflow or underflow",UVM_LOW);
+        invaid = 1'b1;
+      end 
+
+      // if (invaid == 1'b1) begin
+      //   `uvm_info("SCB","INVALID Result because of overflow or underflow",UVM_LOW);
+      // end 
 
   endfunction
 

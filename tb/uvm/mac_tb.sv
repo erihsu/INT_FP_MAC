@@ -1,4 +1,5 @@
 `include "mac_xzy.v"
+`include "macro_def.sv"
 `include "mac_agent_pkg.sv"
 
 import mac_agent_pkg::*;

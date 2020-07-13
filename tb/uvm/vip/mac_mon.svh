@@ -3,7 +3,7 @@
 
 class mac_monitor1 extends uvm_monitor;
 
-  uvm_analysis_port #(monitor_item) ap;
+  uvm_analysis_port #(monitor1_item) ap;
   `uvm_component_utils(mac_monitor1)
 
   virtual mac_if mif;
@@ -41,7 +41,7 @@ endclass
 
 class mac_monitor2 extends uvm_monitor;
 
-  uvm_analysis_port #() ap;
+  uvm_analysis_port #(monitor2_item) ap;
   `uvm_component_utils(mac_monitor2)
 
   virtual mac_if mif;

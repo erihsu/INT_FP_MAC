@@ -3,7 +3,6 @@
 package mac_agent_pkg;
 
   import uvm_pkg::*;
-  `include "macro_def.sv"
   `include "mac_tr.svh"
   `include "mac_sequencer.svh"
   `include "mac_drv.svh"
