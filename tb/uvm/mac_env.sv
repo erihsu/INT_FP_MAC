@@ -6,7 +6,8 @@ class mac_env extends uvm_env;
 
   `uvm_component_utils(mac_env)
 
-  mac_agent mac_agt;
+  input_agent mac_agt1;
+  output_agent mac_agt2;
   mac_scoreboard mac_scr;
   mac_sequencer mac_sqr;
 
@@ -15,14 +16,16 @@ class mac_env extends uvm_env;
   endfunction
 
   function void build_phase(uvm_phase phase);
-    mac_agt = factory_create_c(mac_agent,mac_agt);
+    mac_agt1 = factory_create_c(input_agent,mac_agt1);
+    mac_agt2 = factory_create_c(output_agent,mac_agt2);
     mac_scr = factory_create_c(mac_scoreboard,mac_scr);
     mac_sqr = factory_create_c(mac_sequencer,mac_sqr);
   endfunction : build_phase
 
   function void connect_phase(uvm_phase phase);
-    mac_agt.mon.ap.connect(mac_scr.tr_mac_export);
-    mac_sqr = mac_agt.sqr;
+    mac_agt1.mon.ap.connect(mac_scr.tr_mac_export1);
+    mac_agt2.mom.ap.connect(mac_scr.tr_mac_export2);
+    mac_sqr = mac_agt1.sqr;
   endfunction : connect_phase
 
 endclass : mac_env

@@ -14,7 +14,8 @@ import "DPI-C" function bit is_float_equal(input real a, b);
 class mac_scoreboard extends uvm_scoreboard;
   `uvm_component_utils(mac_scoreboard)
 
-  uvm_analysis_imp #(monitor_item, mac_scoreboard) tr_mac_export;
+  uvm_analysis_imp #(monitor1_item, mac_scoreboard) tr_mac_export1;
+  uvm_analysis_imp #(monitor2_item, mac_scoreboard) tr_mac_export2;
 
   int expected_int8,real_int8;
   real expected_fp16,real_fp16;
@@ -26,17 +27,18 @@ class mac_scoreboard extends uvm_scoreboard;
 
   function void build_phase(uvm_phase phase);
     super.build_phase(phase);
-    tr_mac_export = new("tr_mac_export", this);
+    tr_mac_export1 = new("tr_mac_export1", this);
+    tr_mac_export2 = new("tr_mac_export2", this);
   endfunction
 
-  function void write(monitor_item data);
+  function void write(monitor1_item data1, monitor2_item data2);
 
     bit [15:0] a,b,c; 
 
     `uvm_info("SCB","Entering SCB",UVM_LOW);
      
-    if (data.en == 1'b0) begin  //---------CONFIG or WAIT---------------//
-      if (data.cfg == 1'b1) begin
+    if (data1.en == 1'b0) begin  //---------CONFIG or WAIT---------------//
+      if (data1.cfg == 1'b1) begin
         `uvm_info("SCB","Entering config",UVM_LOW);
         real_int8 = 0;
         real_fp16 = 0.0;
@@ -49,29 +51,29 @@ class mac_scoreboard extends uvm_scoreboard;
       end
     end                    //----------END CONFIG or WAIT----------//
 
-    else if(data.vld == 1'b1 && data.rd == 1'b0) begin  //----------COMPUTE--------------------//
+    else if(data1.vld == 1'b1 && data1.rd == 1'b0) begin  //----------COMPUTE--------------------//
       `uvm_info("SCB","Entering compute",UVM_LOW);
-      if (data.error == 1'b1) begin 
+      if (data2.error == 1'b1) begin 
         `uvm_info("SCB","Detected error,overflow or underflow",UVM_LOW);
         invaid = 1'b1;
       end 
-      else if (data.mode == 1'b0) begin
+      else if (data1.mode == 1'b0) begin
         `uvm_info("SCB","VALID compute",UVM_LOW);
-        real_int8 += int8_mul(binary2int8(data.a),binary2int8(data.b));
+        real_int8 += int8_mul(binary2int8(data1.a),binary2int8(data1.b));
       end 
       else 
       begin 
-        real_fp16 += fp16_mul(binary2fp16(data.a),binary2fp16(data.b));
+        real_fp16 += fp16_mul(binary2fp16(data1.a),binary2fp16(data1.b));
       end
     end         //----------------END COMPUTE------------------------//
         
-    else if (data.rd == 1'b1 && data.vld == 1'b0) begin  //--------------READ and COMPARE----------------//
+    else if (data1.rd == 1'b1 && data1.vld == 1'b0) begin  //--------------READ and COMPARE----------------//
       `uvm_info("SCB","Checking if match",UVM_LOW);
       if (invaid == 1'b1) begin
         `uvm_info("SCB","INVALID Result because of overflow or underflow",UVM_LOW);
       end 
-      else if (data.mode == 1'b0) begin
-        expected_int8 = int16_2_real(binary2int16(data.c));
+      else if (data1.mode == 1'b0) begin
+        expected_int8 = int16_2_real(binary2int16(data2.c));
         if (real_int8 != expected_int8) begin
           `uvm_info("INT8",$sformatf("MISMATCH: %5d != %5d",real_int8,expected_int8),UVM_LOW);
         end 
@@ -82,7 +84,7 @@ class mac_scoreboard extends uvm_scoreboard;
       end
       else 
       begin
-        expected_fp16 = fp16_2_real(binary2fp16(data.c));
+        expected_fp16 = fp16_2_real(binary2fp16(data2.c));
         if (!is_float_equal(real_fp16, expected_fp16)) begin
           `uvm_info("FP16",$sformatf("MISMATCH: %f != %f",real_fp16,expected_fp16),UVM_LOW);
         end 
