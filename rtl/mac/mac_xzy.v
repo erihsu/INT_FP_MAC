@@ -9,7 +9,7 @@
 	//  enable   ________|-----------------------------------------------|_____
 	//  valid    ______________|-----------------|____________________________
 	//  read     ____________________________________________|----|___________
-	//  config   _|----|_|xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx|_____
+	//  cfg      _|----|_|xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx|_____
 	//  in_a     ______________|abcde|abcde|abcde|____________________________
 	//  in_b     ______________|abcde|abcde|abcde|____________________________
 	//  mac_out  ____________________________________________|jklm|___________
@@ -20,8 +20,8 @@ module mac_xzy
 ,input                    rst_n        // asynchronous reset
 ,input					  enable
 ,input 					  valid
-,input 					  read   // write:1 == write behave  ;  write:0 == read behave
-,input                    mode   // 1:fp,0:int
+,input 					  read   // read:1 == read behave  ;  read:0 == write behave
+,input                    mode   // 1:fp16,0:int8
 ,input					  cfg
 ,input             [15:0] in_a 
 ,input             [15:0] in_b 
@@ -32,7 +32,7 @@ module mac_xzy
 reg [15:0] a_reg, b_reg, c_reg;
 reg mode_reg;
 
-wire [15:0] a,b,c;
+wire [15:0] a,b,c,mac_out_tmp;
 
 assign a = a_reg;
 assign b = b_reg;
@@ -40,6 +40,8 @@ assign c = c_reg;
 
 
 assign float_int = mode_reg;
+
+assign mac_out   = mac_out_tmp && read & enable && ~valid; // read out mac_out with condition
 
 //---------------------------------------------------------
 //   MAC
@@ -67,7 +69,7 @@ mac_unit u_mac (
 ,.in_b    (b)
 ,.in_c    (c)
 ,.mode    (float_int)
-,.mac_out (mac_out)
+,.mac_out (mac_out_tmp)
 ,.error	  (error)
 );
 
