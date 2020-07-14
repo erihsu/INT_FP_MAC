@@ -9,5 +9,5 @@ package mac_agent_pkg;
   `include "mac_mon.svh"
   `include "mac_agent.svh"
   `include "mac_sequence.svh"
-  
+
 endpackage

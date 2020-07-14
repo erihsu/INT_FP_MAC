@@ -2,12 +2,12 @@
 `define MAC_AGENT_SVH
 
 
-class input_agent extends uvm_agent;
+class mac_agent extends uvm_agent;
 
-  `uvm_component_utils(input_agent)
+  `uvm_component_utils(mac_agent)
 
   mac_driver drv;
-  mac_monitor1 mon;
+  mac_monitor mon;
   mac_sequencer sqr;
   virtual mac_if mif;
 
@@ -16,11 +16,13 @@ class input_agent extends uvm_agent;
   endfunction
 
   virtual function void build_phase(uvm_phase phase);
+
     `factory_create_c(mac_sequencer,sqr);
     `factory_create_c(mac_driver,drv);
-    `factory_create_c(mac_monitor1,mon);
+    `factory_create_c(mac_monitor,mon);
+
     if (!uvm_config_db #(virtual mac_if)::get(this, "", "vif", mif)) begin
-      `uvm_fatal(get_full_name, "No interface set for agent");
+      `uvm_error(get_full_name, "No interface set for agent");
     end
     uvm_config_db #(virtual mac_if)::set(this, "drv", "vif", mif);
     uvm_config_db #(virtual mac_if)::set(this, "mon", "vif", mif);
@@ -30,28 +32,6 @@ class input_agent extends uvm_agent;
     drv.seq_item_port.connect(sqr.seq_item_export);
   endfunction
 
-endclass : input_agent
-
-class output_agent extends  uvm_agent;
-
-  `uvm_component_utils(output_agent)
-
-  mac_monitor2 mon;
-  virtual mac_if mif;
-
-  function new(string name, uvm_component parent = null);
-    super.new(name, parent);
-  endfunction
-
-  virtual function void build_phase(uvm_phase phase);
-    `factory_create_c(mac_monitor2,mon);
-    if (!uvm_config_db #(virtual mac_if)::get(this, "", "vif", mif)) begin
-      `uvm_fatal(get_full_name, "No interface set for agent");
-    end
-    uvm_config_db #(virtual mac_if)::set(this, "drv", "vif", mif);
-    uvm_config_db #(virtual mac_if)::set(this, "mon", "vif", mif);
-  endfunction
-
-endclass : output_agent
+endclass : mac_agent
 
 `endif  /* MAC_AGENT_SVH */

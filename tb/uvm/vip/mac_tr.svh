@@ -2,55 +2,55 @@
 `define MAC_TR_SVH
 
 
-// class monitor_item extends uvm_sequence_item;
-//   `uvm_object_utils(monitor_item)
-
-//   rand bit [15:0] a;
-//   rand bit [15:0] b;
-//   rand bit [15:0] c;
-//   rand bit en;
-//   rand bit vld;
-//   rand bit rd;
-//   rand bit mode;
-//   rand bit cfg;
-//   rand bit error;
-
-//   function new(string name = "monitor_item");
-//     super.new(name);
-//   endfunction
-
-
-// endclass: monitor_item
-
-class monitor1_item extends uvm_sequence_item;
-  `uvm_object_utils(monitor1_item)
+class monitor_item extends uvm_sequence_item;
+  `uvm_object_utils(monitor_item)
 
   rand bit [15:0] a;
   rand bit [15:0] b;
+  rand bit [15:0] c;
   rand bit en;
   rand bit vld;
   rand bit rd;
   rand bit mode;
-  rand bit cfg;  
-
-  function new(string name = "monitor1_item");
-    super.new(name);
-  endfunction
-
-
-endclass: monitor1_item
-
-class monitor2_item extends uvm_sequence_item;
-  `uvm_object_utils(monitor2_item)
-
-  rand bit [15:0] c;
+  rand bit cfg;
   rand bit error;
 
-  function new(string name = "monitor2_item");
+  function new(string name = "monitor_item");
     super.new(name);
   endfunction
 
-endclass: monitor2_item  
+
+endclass: monitor_item
+
+// class monitor1_item extends uvm_sequence_item;
+//   `uvm_object_utils(monitor1_item)
+
+//   rand bit [15:0] a;
+//   rand bit [15:0] b;
+//   rand bit en;
+//   rand bit vld;
+//   rand bit rd;
+//   rand bit mode;
+//   rand bit cfg;  
+
+//   function new(string name = "monitor1_item");
+//     super.new(name);
+//   endfunction
+
+
+// endclass: monitor1_item
+
+// class monitor2_item extends uvm_sequence_item;
+//   `uvm_object_utils(monitor2_item)
+
+//   rand bit [15:0] c;
+//   rand bit error;
+
+//   function new(string name = "monitor2_item");
+//     super.new(name);
+//   endfunction
+
+// endclass: monitor2_item  
 
 class mac_tr extends uvm_sequence_item;
   `uvm_object_utils(mac_tr)

@@ -1,5 +1,3 @@
-`ifndef MAC_SEQUENCER_SVH
-`define MAC_SEQUENCER_SVH
 
 class mac_sequencer extends uvm_sequencer #(mac_int8);
 
@@ -10,5 +8,3 @@ class mac_sequencer extends uvm_sequencer #(mac_int8);
   endfunction
 
 endclass : mac_sequencer
-
-`endif  /* MAC_SEQUENCER_SVH */

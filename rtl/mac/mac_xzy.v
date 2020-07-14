@@ -33,6 +33,7 @@ reg [15:0] a_reg, b_reg, c_reg;
 reg mode_reg;
 
 wire [15:0] a,b,c,mac_out_tmp;
+wire float_int;
 
 assign a = a_reg;
 assign b = b_reg;
@@ -41,7 +42,7 @@ assign c = c_reg;
 
 assign float_int = mode_reg;
 
-assign mac_out   = mac_out_tmp && read & enable && ~valid; // read out mac_out with condition
+assign mac_out   = (read && enable && ~valid) ? mac_out_tmp : 16'b0 ; // read out mac_out with condition
 
 //---------------------------------------------------------
 //   MAC

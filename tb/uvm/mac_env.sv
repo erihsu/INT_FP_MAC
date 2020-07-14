@@ -6,7 +6,7 @@ class mac_env extends uvm_env;
 
   `uvm_component_utils(mac_env)
 
-  input_agent mac_agt1;
+  mac_agent mac_agt1;
   output_agent mac_agt2;
   mac_scoreboard mac_scr;
   mac_sequencer mac_sqr;
@@ -16,8 +16,7 @@ class mac_env extends uvm_env;
   endfunction
 
   function void build_phase(uvm_phase phase);
-    `factory_create_c(input_agent,mac_agt1);
-    `factory_create_c(output_agent,mac_agt2);
+    `factory_create_c(mac_agent,mac_agt1);
     `factory_create_c(mac_scoreboard,mac_scr);
     `factory_create_c(mac_sequencer,mac_sqr);
   endfunction : build_phase

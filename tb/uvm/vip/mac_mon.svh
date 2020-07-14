@@ -1,14 +1,14 @@
 `ifndef MAC_MON_SVH
 `define MAC_MON_SVH
 
-class mac_monitor1 extends uvm_monitor;
+class mac_monitor extends uvm_monitor;
 
-  uvm_analysis_port #(monitor1_item) ap;
-  `uvm_component_utils(mac_monitor1)
+  uvm_analysis_port #(monitor_item) ap;
+  `uvm_component_utils(mac_monitor)
 
   virtual mac_if mif;
 
-  function new(string name= "mac_monitor1", uvm_component parent = null);
+  function new(string name= "mac_monitor", uvm_component parent = null);
     super.new(name, parent);
     ap = new("ap", this);
     
@@ -17,14 +17,14 @@ class mac_monitor1 extends uvm_monitor;
   virtual function void build_phase(uvm_phase phase);
     if (!uvm_config_db #(virtual mac_if)::get(this, "", "vif", mif)) begin
       `uvm_fatal(get_full_name(), "No virtual interface found");
+    
     end
   endfunction
 
   task run_phase(uvm_phase phase);
-
-  `uvm_info("MON","Monitor data",UVM_LOW)
+    `uvm_info("MON","Monitor data",UVM_LOW)
     forever begin    
-      monitor1_item tr = monitor1_item::type_id::create("tr", this);
+      monitor_item tr = monitor_item::type_id::create("tr", this);
       @(mif.pck);
       tr.a = mif.pck.a;
       tr.b = mif.pck.b;
@@ -39,37 +39,37 @@ class mac_monitor1 extends uvm_monitor;
 
 endclass
 
-class mac_monitor2 extends uvm_monitor;
+// class mac_monitor2 extends uvm_monitor;
 
-  uvm_analysis_port #(monitor2_item) ap;
-  `uvm_component_utils(mac_monitor2)
+//   uvm_analysis_port #(monitor2_item) ap;
+//   `uvm_component_utils(mac_monitor2)
 
-  virtual mac_if mif;
+//   virtual mac_if mif;
 
-  function new(string name= "mac_monitor2", uvm_component parent = null);
-    super.new(name, parent);
-    ap = new("ap", this);
+//   function new(string name= "mac_monitor2", uvm_component parent = null);
+//     super.new(name, parent);
+//     ap = new("ap", this);
     
-  endfunction
+//   endfunction
 
-  virtual function void build_phase(uvm_phase phase);
-    if (!uvm_config_db #(virtual mac_if)::get(this, "", "vif", mif)) begin
-      `uvm_fatal(get_full_name(), "No virtual interface found");
-    end
-  endfunction
+//   virtual function void build_phase(uvm_phase phase);
+//     if (!uvm_config_db #(virtual mac_if)::get(this, "", "vif", mif)) begin
+//       `uvm_fatal(get_full_name(), "No virtual interface found");
+//     end
+//   endfunction
 
-  task run_phase(uvm_phase phase);
+//   task run_phase(uvm_phase phase);
 
-  `uvm_info("MON","Monitor data",UVM_LOW)
-    forever begin    
-      monitor2_item tr = monitor2_item::type_id::create("tr", this);
-      @(mif.pck);
-      tr.c = mif.pck.c;
-      tr.error = mif.pck.error;
-      ap.write(tr);
-    end
-  endtask
+//   `uvm_info("MON","Monitor data",UVM_LOW)
+//     forever begin    
+//       monitor2_item tr = monitor2_item::type_id::create("tr", this);
+//       @(mif.pck);
+//       tr.c = mif.pck.c;
+//       tr.error = mif.pck.error;
+//       ap.write(tr);
+//     end
+//   endtask
 
-endclass
+// endclass
 
 `endif  /* MAC_MON_SVH */
