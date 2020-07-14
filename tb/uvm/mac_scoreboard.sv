@@ -26,8 +26,7 @@ class mac_scoreboard extends uvm_scoreboard;
 
   function void build_phase(uvm_phase phase);
     super.build_phase(phase);
-    tr_mac_export1 = new("tr_mac_export1", this);
-    tr_mac_export2 = new("tr_mac_export2", this);
+    tr_mac_export = new("tr_mac_export", this);
   endfunction
 
   function void write(monitor_item data1);
