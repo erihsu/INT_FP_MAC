@@ -15,7 +15,7 @@ module int_fp_mul (mode,a,b,c,error);
     wire [21:0] mantissa_prod;
     wire c1,c2;
     assign overflow = c1;
-    assign underflow = (sum_exponent[4] == 1'b0) ? 1'b1 : 1'b0;
+    assign underflow = (biased_sum_exponent[4] == 1'b1) ? 1'b1 : 1'b0;
 
     assign a_zero = ~(|a);
     assign b_zero = ~(|b);
