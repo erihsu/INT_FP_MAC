@@ -30,8 +30,8 @@ def generate_fp16_mul_golden():
     golden_list_dec = ""
 
     for _ in range(10):
-        a = random.uniform(-0.001,0.001)
-        b = random.uniform(-0.001,0.001)
+        a = random.uniform(-0.0001,0.0001)
+        b = random.uniform(-0.0001,0.0001)
         expected = a*b
         a_bin =  bin(np.float16(a).view("H"))[2:].zfill(16)
         b_bin =  bin(np.float16(b).view("H"))[2:].zfill(16)
@@ -69,8 +69,8 @@ def generate_fp16_add_golden():
     golden_list_dec = ""
 
     for _ in range(10):
-        a = random.uniform(-0.001,0.001)
-        b = random.uniform(-0.001,0.001)
+        a = random.uniform(-0.0001,0.0001)
+        b = random.uniform(-0.0001,0.0001)
         expected = a+b
         a_bin =  bin(np.float16(a).view("H"))[2:].zfill(16)
         b_bin =  bin(np.float16(b).view("H"))[2:].zfill(16)

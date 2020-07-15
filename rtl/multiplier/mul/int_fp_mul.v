@@ -14,8 +14,8 @@ module int_fp_mul (mode,a,b,c,error);
     wire [14:0] normalized_out;
     wire [21:0] mantissa_prod;
     wire c1,c2;
-    assign overflow = c1;
-    assign underflow = (biased_sum_exponent[4] == 1'b1) ? 1'b1 : 1'b0;
+    assign overflow = (c1 && c2 && ~biased_sum_exponent[4]) ? 1'b1 :1'b0;
+    assign underflow = (~c1 && ~c2 && biased_sum_exponent[4]) ? 1'b1:1'b0;
 
     assign a_zero = ~(|a);
     assign b_zero = ~(|b);
@@ -25,7 +25,7 @@ module int_fp_mul (mode,a,b,c,error);
     assign mantissa_prod = multiplier_output[21:0];
     assign c_tmp = mode ? ((a_zero | b_zero) ? 16'b0 : {c_sign,normalized_out}) : ((a[7]^b[7] == 1'b0) ? multiplier_output[15:0] : {1'b1,~multiplier_output[14:0]+1'b1});
     // error handle
-    assign c = (error) ? (underflow ? {c_sign,15'b0} : {c_sign,15'b1}) : c_tmp;
+    assign c = (~error) ? c_tmp : (underflow ? {c_sign,15'b0000_0000_0000_000} : {c_sign,5'b1111_1,10'b0000_0000_00});
     assign error = overflow | underflow; 
     mul16x16 u1(multiplier_input1,multiplier_input2,multiplier_output);
     
