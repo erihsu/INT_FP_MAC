@@ -15,18 +15,22 @@
 	//  mac_out  ____________________________________________|jklm|___________
 	//  mode     _|----|______________________________________________________
 
+// for pipline compile
+`define PIPLINE 1
+
 module mac_xzy
-(input                    clk 
-,input                    rst_n        // asynchronous reset
-,input					  enable
-,input 					  valid
-,input 					  read   // read:1 == read behave  ;  read:0 == write behave
-,input                    mode   // 1:fp16,0:int8
-,input					  cfg
-,input             [15:0] in_a 
-,input             [15:0] in_b 
-,output            [15:0] mac_out
-,output					  error				
+(
+	input                    clk, 
+	input                    rst_n,        // asynchronous reset
+	input					  enable,
+	input 					  valid,
+	input 					  read,   // read:1 == read behave  ;  read:0 == write behave
+	input                    mode,   // 1:fp16,0:int8
+	input					  cfg,
+	input             [15:0] in_a, 
+	input             [15:0] in_b, 
+	output            [15:0] mac_out,
+	output					  error
 );
 
 reg [15:0] a_reg, b_reg, c_reg;
@@ -47,7 +51,7 @@ assign mac_out   = (read && enable && ~valid) ? mac_out_tmp : 16'b0 ; // read ou
 //---------------------------------------------------------
 //   MAC
 //---------------------------------------------------------	
-always @ ( posedge clk or posedge rst_n ) begin
+always @ ( posedge clk or negedge rst_n ) begin
 	if ( ! rst_n ) begin
 		a_reg    <= 16'b0 ;
 		b_reg    <= 16'b0 ;
@@ -66,12 +70,17 @@ always @ ( posedge clk or posedge rst_n ) begin
 end 
 
 mac_unit u_mac (
- .in_a    (a)
-,.in_b    (b)
-,.in_c    (c)
-,.mode    (float_int)
-,.mac_out (mac_out_tmp)
-,.error	  (error)
+
+`ifdef PIPLINE
+	 .clk(clk),
+	 .rst_n(rst_n),
+`endif
+	 .in_a    (a),
+	 .in_b    (b),
+	 .in_c    (c),
+	 .mode    (float_int),
+	 .mac_out (mac_out_tmp),
+	 .error	  (error)
 );
 
 endmodule	

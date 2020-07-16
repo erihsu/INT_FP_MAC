@@ -1,4 +1,4 @@
-// No pipelined MAC
+// No pipelined/piplined MAC
 // Version: 1.0
 
 // Description:
@@ -9,17 +9,25 @@
 
 module mac_unit
 (
-input             [15:0] in_a // multiplier input1
-,input             [15:0] in_b // multiplier input2
-,input 			   [15:0] in_c // adder input2 ; adder input1 = in_a*in_b
-,input 					  mode
-,output         [15:0] mac_out
-,output 				  error
+`ifdef PIPLINE
+	input clk,
+	input rst_n,
+`endif
+	input             [15:0] in_a, // multiplier input1
+	input             [15:0] in_b, // multiplier input2
+	input 			   [15:0] in_c, // adder input2 ; adder input1 = in_a*in_b
+	input 					  mode,
+	output         [15:0] mac_out,
+	output 				  error
 );
 
 wire [15:0] mul_out;
 
 int_fp_add add(
+`ifdef PIPLINE
+	.clk (clk),
+	.rst_n (rst_n),
+`endif 
 	.mode ( mode  ) ,
 	.a    ( mul_out    ) ,
 	.b    ( in_c    ) ,
@@ -28,6 +36,10 @@ int_fp_add add(
 
 
 int_fp_mul mul(
+`ifdef PIPLINE
+	.clk (clk),
+	.rst_n (rst_n),
+`endif 
 	.mode ( mode  ) ,
 	.a    ( in_a    ) ,
 	.b    ( in_b    ) ,
