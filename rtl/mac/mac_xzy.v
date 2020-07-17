@@ -15,8 +15,6 @@
 	//  mac_out  ____________________________________________|jklm|___________
 	//  mode     _|----|______________________________________________________
 
-// for pipline compile
-`define PIPLINE 1
 
 module mac_xzy
 (
@@ -62,7 +60,7 @@ always @ ( posedge clk or negedge rst_n ) begin
 		if (valid) begin 
 			a_reg   <= in_a ;
 			b_reg   <= in_b ;
-			c_reg   <= mac_out;
+			c_reg   <= mac_out_tmp;
 		end
 	end else if (cfg) begin
 		mode_reg <= mode;
