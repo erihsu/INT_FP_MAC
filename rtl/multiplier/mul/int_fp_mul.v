@@ -1,17 +1,17 @@
 module int_fp_mul (
 `ifdef PIPLINE
-    input clk,
-    input rst_n,
+    input         clk,
+    input         rst_n,
 `endif
-    input mode,
-    input [15:0] a,
-    input [15:0] b,
+    input         mode,
+    input  [15:0] a,
+    input  [15:0] b,
     output [15:0] c,
-    output error
+    output        error
     );
 
     wire [15:0] c_tmp;
-    wire c_sign,a_zero,b_zero;
+    wire        c_sign,a_zero,b_zero;
     wire [4:0] sum_exponent, biased_sum_exponent;
     wire [15:0] multiplier_input1,multiplier_input2;
 

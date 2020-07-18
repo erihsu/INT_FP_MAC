@@ -22,13 +22,13 @@ set symbol_library tsmc090.sdb
 # ---------------------------------
 #
 # Set up a work library for this design in a subdirectory:
-define_design_lib mac_xzy -path ./Intro_TopSynth
+define_design_lib mac_top -path ./Intro_TopSynth
 #
 # Precompile and check all modules:
-read_file -format verilog "../rtl/mac/mac_xzy.v  ../rtl/adder/cla/cla_nbit.v ../rtl/mac/mac_unit.v ../rtl/adder/adder/add_normalizer.v ../rtl/adder/adder/alignment.v ../rtl/adder/adder/int_fp_add.v ../rtl/multiplier/mul/mul_normalizer.v ../rtl/multiplier/vedic/mul16x16.v ../rtl/multiplier/vedic/mul2x2.v ../rtl/multiplier/vedic/mul4x4.v ../rtl/multiplier/vedic/mul8x8.v ../rtl/multiplier/mul/int_fp_mul.v"
+read_file -format verilog "../rtl/mac/mac_top.v  ../rtl/adder/cla/cla_nbit.v ../rtl/mac/mac_unit.v ../rtl/adder/adder/add_normalizer.v ../rtl/adder/adder/alignment.v ../rtl/adder/adder/int_fp_add.v ../rtl/multiplier/mul/mul_normalizer.v ../rtl/multiplier/vedic/mul16x16.v ../rtl/multiplier/vedic/mul2x2.v ../rtl/multiplier/vedic/mul4x4.v ../rtl/multiplier/vedic/mul8x8.v ../rtl/multiplier/mul/int_fp_mul.v"
 #
 # Prelink the complete design (top module):
-elaborate -work mac_xzy mac_xzy
+elaborate -work mac_top mac_top
 #
 # ---------------------------------
 #
@@ -41,7 +41,7 @@ set_fix_multiple_port_nets -all -buffer_constants
 #
 # Drop into interactive mode for compile & optimize:
 #
-current_design mac_xzy
+current_design mac_top
 check_design
 #T=4
 create_clock -name "clock" -period 4 -waveform { 0 2 }  { clk }

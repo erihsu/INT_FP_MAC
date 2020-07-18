@@ -2577,7 +2577,7 @@ module mac_unit ( in_a, in_b, in_c, mode, mac_out, error );
 endmodule
 
 
-module mac_xzy ( clk, rst_n, enable, valid, read, mode, cfg, in_a, in_b, 
+module mac_top ( clk, rst_n, enable, valid, read, mode, cfg, in_a, in_b, 
         mac_out, error );
   input [15:0] in_a;
   input [15:0] in_b;

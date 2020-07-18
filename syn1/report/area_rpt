@@ -1,8 +1,8 @@
-Warning: Design 'mac_xzy' has '25' unresolved references. For more detailed information, use the "link" command. (UID-341)
+Warning: Design 'mac_top' has '25' unresolved references. For more detailed information, use the "link" command. (UID-341)
  
 ****************************************
 Report : area
-Design : mac_xzy
+Design : mac_top
 Version: K-2015.06
 Date   : Fri Jul 17 23:43:51 2020
 ****************************************

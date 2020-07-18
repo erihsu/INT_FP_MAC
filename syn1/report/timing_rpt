@@ -38,7 +38,7 @@ Warning: Unable to resolve reference 'cla_nbit' in 'mul4x4_4'. (LINK-5)
 Warning: Unable to resolve reference 'cla_nbit' in 'mul4x4_3'. (LINK-5)
 Warning: Unable to resolve reference 'cla_nbit' in 'mul4x4_2'. (LINK-5)
 Warning: Unable to resolve reference 'cla_nbit' in 'mul4x4_1'. (LINK-5)
-Warning: Design 'mac_xzy' has '25' unresolved references. For more detailed information, use the "link" command. (UID-341)
+Warning: Design 'mac_top' has '25' unresolved references. For more detailed information, use the "link" command. (UID-341)
 Information: Updating design information... (UID-85)
  
 ****************************************
@@ -46,7 +46,7 @@ Report : timing
         -path full
         -delay max
         -max_paths 1
-Design : mac_xzy
+Design : mac_top
 Version: K-2015.06
 Date   : Fri Jul 17 23:43:51 2020
 ****************************************
@@ -63,7 +63,7 @@ Wire Load Model Mode: top
 
   Des/Clust/Port     Wire Load Model       Library
   ------------------------------------------------
-  mac_xzy            tsmc090_wl10          typical
+  mac_top            tsmc090_wl10          typical
 
   Point                                                   Incr       Path
   --------------------------------------------------------------------------

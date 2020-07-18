@@ -1,14 +1,13 @@
 module int_fp_add (
 `ifdef PIPLINE
-    input clk,
-    input rst_n,
+    input         clk,
+    input         rst_n,
 `endif
-    input mode,
-    input [15:0] a,
-    input [15:0] b,
+    input         mode,
+    input  [15:0] a,
+    input  [15:0] b,
     output [15:0] c
     );
-
 
     wire [10:0] adder_input_1,adder_input_2,aligned_small,adder_output;
     wire if_sub,a_sign, b_sign, c_sign,c1;
@@ -29,18 +28,15 @@ module int_fp_add (
 `endif  
 
 
-    assign a_sign = a[15];
-    assign b_sign = b[15];
-
-    assign if_sub = (a_sign == b_sign) ? 1'b0 : 1'b1;
-    assign c_sign = a_larger_b ? a_sign : b_sign;
-
-    assign higher_a = (mode == 1'b0) ? a[15:11] : 5'b0;
-    assign higher_b = (mode == 1'b0) ? b[15:11] : 5'b0;
-
+    assign a_sign        = a[15];
+    assign b_sign        = b[15];
+    assign if_sub        = (a_sign == b_sign) ? 1'b0 : 1'b1;
+    assign c_sign        = a_larger_b ? a_sign : b_sign;
+    assign higher_a      = (mode == 1'b0) ? a[15:11] : 5'b0;
+    assign higher_b      = (mode == 1'b0) ? b[15:11] : 5'b0;
     assign adder_input_1 = (mode==1'b0) ? a[10:0] :{1'b1,bigger[9:0]};
     assign adder_input_2 = (mode==1'b0) ? b[10:0] : (if_sub ? ~aligned_small + 1'b1 : aligned_small);
-    assign c = (mode == 1'b0) ? {higher_add,adder_output} : result;
+    assign c             = (mode == 1'b0) ? {higher_add,adder_output} : result;
 
     //compare two number regardless sign
     always @(*) begin
