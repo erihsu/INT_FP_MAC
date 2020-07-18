@@ -1,0 +1,30 @@
+ 
+****************************************
+Report : area
+Design : mac_xzy
+Version: K-2015.06
+Date   : Sat Jul 18 14:30:08 2020
+****************************************
+
+Library(s) Used:
+
+    typical (File: /opt/Foundary_Library/TSMC90/aci/sc-x/synopsys/typical.db)
+
+Number of ports:                         3086
+Number of nets:                          7200
+Number of cells:                         4351
+Number of combinational cells:           4113
+Number of sequential cells:                77
+Number of macros/black boxes:               0
+Number of buf/inv:                        966
+Number of references:                      26
+
+Combinational area:              27014.601952
+Buf/Inv area:                     4550.414446
+Noncombinational area:             925.041605
+Macro/Black Box area:                0.000000
+Net Interconnect area:          427375.477692
+
+Total cell area:                 27939.643557
+Total area:                     455315.121249
+1
