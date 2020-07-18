@@ -11,7 +11,7 @@ The basic MAC element is multiplier and adder. We use Vedic Multiplier and Carry
 
 ## Synthesis
 
-TBD
+The Synthesis process is completed by Design compile with TCL script, Maximum operating frequency is about 200M Under the tsmc090 process.
 
 ## Verification
 
