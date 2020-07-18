@@ -1,16 +1,22 @@
 module cla_nbit #(
     parameter n = 4
-) (a, b, ci, s, co);
-  input [n-1:0] a, b;
-  input ci;
-  output [n-1:0] s;
-  output co;
+) (
+  input   [n-1:0] a,
+  input   [n-1:0] b,
+  input           ci,
+  output  [n-1:0] s,
+  output          co
+  );
+
   wire [n-1:0] g;
   wire [n-1:0] p;
-  wire [n:0] c;
+  wire [  n:0] c;
+
   assign c[0] = ci;
-  assign co = c[n];
+  assign co   = c[n];
+
   genvar i;  /* i - generate index variable */
+
   generate
     for (i = 0; i < n; i = i + 1) begin : addbit
       assign s[i] = a[i] ^ b[i] ^ c[i];
@@ -19,4 +25,5 @@ module cla_nbit #(
       assign c[i + 1] = g[i] | (p[i] & c[i]);
     end
   endgenerate
+  
 endmodule

@@ -1,4 +1,4 @@
-`include "mac_xzy.v"
+`include "mac_top.v"
 `include "macro_def.sv"
 `include "mac_agent_pkg.sv"
 
@@ -17,7 +17,7 @@ module mac_tb();
 
   mac_if mif(clk);
 
-  mac_xzy dut(
+  mac_top dut(
         .clk(clk),
         .rst_n(rst_n),
         .enable(mif.en),

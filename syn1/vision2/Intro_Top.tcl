@@ -8,9 +8,10 @@ set write_name_nets_same_as_ports "true"
 #######################################################
 #
 # dc_shell TcL startup script:
+
 # Some design environment variables:
 #
-set search_path ". $search_path ../library"
+set search_path ". $search_path ./lib"
 #
 # tc = Typical; bc = Best; wc = Worst:
 set target_library typical.db
@@ -21,25 +22,13 @@ set symbol_library tsmc090.sdb
 # ---------------------------------
 #
 # Set up a work library for this design in a subdirectory:
-define_design_lib mac_xzy -path ./Intro_TopSynth
+define_design_lib mac_top -path ./Intro_TopSynth
 #
 # Precompile and check all modules:
-analyze -work mac_xzy -format verilog "../rtl/mac/mac_xzy.v" 
-analyze -work mac_xzy -format verilog "../rtl/mac/mac_unit.v"
-analyze -work mac_xzy -format verilog "../rtl/adder/cla/cla_nbit.v" 
-analyze -work mac_xzy -format verilog "../rtl/adder/adder/add_normalizer.v" 
-analyze -work mac_xzy -format verilog "../rtl/adder/adder/alignment.v" 
-analyze -work mac_xzy -format verilog "../rtl/adder/adder/int_fp_add.v" 
-analyze -work mac_xzy -format verilog "../rtl/multiplier/mul/mul_normalizer.v" 
-analyze -work mac_xzy -format verilog "../rtl/multiplier/vedic/mul16x16.v" 
-analyze -work mac_xzy -format verilog "../rtl/multiplier/vedic/mul2x2.v" 
-analyze -work mac_xzy -format verilog "../rtl/multiplier/vedic/mul4x4.v" 
-analyze -work mac_xzy -format verilog "../rtl/multiplier/vedic/mul8x8.v" 
-analyze -work mac_xzy -format verilog "../rtl/multiplier/mul/int_fp_mul.v" 
-
+read_file -format verilog "../rtl/mac/mac_top.v  ../rtl/adder/cla/cla_nbit.v ../rtl/mac/mac_unit.v ../rtl/adder/adder/add_normalizer.v ../rtl/adder/adder/alignment.v ../rtl/adder/adder/int_fp_add.v ../rtl/multiplier/mul/mul_normalizer.v ../rtl/multiplier/vedic/mul16x16.v ../rtl/multiplier/vedic/mul2x2.v ../rtl/multiplier/vedic/mul4x4.v ../rtl/multiplier/vedic/mul8x8.v ../rtl/multiplier/mul/int_fp_mul.v"
 #
 # Prelink the complete design (top module):
-elaborate -work mac_xzy mac_xzy
+elaborate -work mac_top mac_top
 #
 # ---------------------------------
 #
@@ -48,26 +37,20 @@ set_operating_conditions   typical
 set_wire_load_model -name "tsmc090_wl10" [all_designs]
 #
 # For XG mode portability to back-end tools:
-# set_fix_multiple_port_nets -all -buffer_constants
-#
-# Some netlist-level design rules:
-# set_drive      5.0 [all_inputs]
-# set_load       1.0 [all_outputs]
-# set_max_fanout 5   [all_inputs]
-#
-# Design-specific constraints:
-# set_max_area   200
-# set_max_delay  0.5 -to [all_outputs]
+set_fix_multiple_port_nets -all -buffer_constants
 #
 # Drop into interactive mode for compile & optimize:
 #
+current_design mac_top
+check_design
+#T=4
 create_clock -name "clock" -period 4 -waveform { 0 2 }  { clk }
 
- compile
+compile
 #
 # check the timing and area infomation
- report_timing 
- report_area
+ report_timing > ./report/timing_rpt
+ report_area   > ./report/area_rpt
 # 
 # Save the netlist in Synopsys (ddc) format:
 # write -hierarchy -format ddc
@@ -77,15 +60,16 @@ create_clock -name "clock" -period 4 -waveform { 0 2 }  { clk }
 #
 # Write a Standard Delay Format (SDF) back-annotation
 # file for future simulation, using DC library delays:
-# write_sdf mac_xzy.SDF
+# write_sdf Intro_Top.SDF
 #
 # Quit DC:
  exit
 # 
 # re-synthesize the RTL to improve the timing
-# dc_shell-t -f mac_xzy.sct
+# dc_shell-t -f Intro_Top.sct
 # ungroup -all -flatten
 # compile -map_effort high
 # change_names -rules verilog
 # write -hierarchy -format verilog -output Intro_Flatten_Netlist.v
-# write_sdf mac_xzy.sdf
+# write_sdf Intro_Top.sdf
+
