@@ -87,8 +87,14 @@ create_clock -name "clock" -period 7 -waveform { 0 3.5 }  { clk }
 # 
 # re-synthesize the RTL to improve the timing
 # dc_shell-t -f mac_xzy.sct
+
 # ungroup -all -flatten
+# compile -ungroup_all -incr -area_effort high -gate_clock
 # compile -map_effort high
+# compile_ultra -gate_clock -area_high_effort_script
+
+
+
 # change_names -rules verilog
 # write -hierarchy -format verilog -output Intro_Flatten_Netlist.v
 # write_sdf mac_xzy.sdf
