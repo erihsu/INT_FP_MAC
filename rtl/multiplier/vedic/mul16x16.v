@@ -3,9 +3,9 @@ module mul16x16(
     input clk,
     input rst_n,
 `endif
-	input  [15:0] a,
-	input  [15:0] b,
-	output [15:0] c);
+    input  [15:0] a,
+    input  [15:0] b,
+    output [31:0] c);
 
     wire [63:0] tmp1,tmp2;
     wire [23:0] result1;
