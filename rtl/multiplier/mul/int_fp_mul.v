@@ -31,7 +31,7 @@ module int_fp_mul (
 
     assign c_tmp = mode ? ((a_zero | b_zero) ? 16'b0 : {c_sign,normalized_out}) : ((a[7]^b[7] == 1'b0) ? multiplier_output[15:0] : {1'b1,~multiplier_output[14:0]+1'b1});
     // error handle
-    assign c = (~error) ? c_tmp : (underflow ? {c_sign,15'b0000_0000_0000_000} : {c_sign,5'b1111_1,10'b0000_0000_00});
+    assign c = mode ? ((~error) ? c_tmp : (underflow ? {c_sign,15'b0000_0000_0000_000} : {c_sign,5'b1111_1,10'b0000_0000_00})) : c_tmp;
     assign error = overflow | underflow; 
 
     
