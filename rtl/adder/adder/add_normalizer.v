@@ -1,10 +1,10 @@
 module add_normalizer (
     input             sign,
-    input             if_carray,
-    input             if_sub,
     input      [ 4:0] exponent,
     input      [10:0] mantissa_add,
-    output reg [15:0] result
+    output reg [15:0] result,
+    input             if_carray,
+    input             if_sub,
     );
 
     reg [4:0] number_of_zero_lead;
