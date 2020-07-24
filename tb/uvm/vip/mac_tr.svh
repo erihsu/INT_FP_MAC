@@ -25,61 +25,49 @@ endclass: monitor_item
 class mac_tr extends uvm_sequence_item;
   `uvm_object_utils(mac_tr)
 
-  rand bit [15:0] a[];
-  rand bit [15:0] b[];
-  rand bit [15:0] c[];
-
+  rand bit [15:0] a;
+  rand bit [15:0] b;
+  rand bit en;
+  rand bit vld;
+  rand bit rd;
+  rand bit cfg;
   rand bit mode;
 
   // RTL independent
-  rand int cfg_cycle; // cycles of config
-  rand int read_cycle; // cycles of read
-  rand int size;
+  int cfg_cycle = 2; // cycles of config
+  int read_cycle = 2; // cycles of read
 
   function new(string name = "mac_tr");
     super.new(name);
   endfunction
 
-  constraint base_c {
-    a.size() == size;
-    b.size() == size;
-    c.size() == size;
-    size inside {5};
-    read_cycle == 2;
-    cfg_cycle  == 2;
-  }
-
-  constraint c_order {
-    solve size before a,b,c;
-  }
-
 endclass : mac_tr
 
-class mac_int8 extends mac_tr;
-  `uvm_object_utils(mac_int8)  
+// class mac_int8 extends mac_tr;
+//   `uvm_object_utils(mac_int8)  
 
-  function new(string name = "mac_int8");
-    super.new(name);
-  endfunction
+//   function new(string name = "mac_int8");
+//     super.new(name);
+//   endfunction
 
-  constraint cfg_int8 {
-    mode == 1'b0;
-  }
+//   constraint cfg_int8 {
+//     mode == 1'b0;
+//   }
 
-endclass: mac_int8
+// endclass: mac_int8
 
-class mac_fp16 extends mac_tr;
-  `uvm_object_utils(mac_fp16)  
+// class mac_fp16 extends mac_tr;
+//   `uvm_object_utils(mac_fp16)  
 
-  function new(string name = "mac_fp16");
-    super.new(name);
-  endfunction
+//   function new(string name = "mac_fp16");
+//     super.new(name);
+//   endfunction
 
-  constraint cfg_fp16 {
-    mode == 1'b1;
-  }
+//   constraint cfg_fp16 {
+//     mode == 1'b1;
+//   }
 
-endclass: mac_fp16
+// endclass: mac_fp16
 
 
 

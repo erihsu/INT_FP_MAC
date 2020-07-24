@@ -49,7 +49,7 @@ module mac_tb();
 
   initial begin
     uvm_top.enable_print_topology = 1;
-    run_test("base_test");
+    run_test();
   end
 
   // initial begin
