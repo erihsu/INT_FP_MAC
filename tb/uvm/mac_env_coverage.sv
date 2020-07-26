@@ -5,9 +5,10 @@ class mac_env_coverage extends uvm_subscriber #(monitor_item);
 
 	`uvm_component_utils(mac_env_coverage);
 
+	monitor_item m_item;
 
 	covergroup monitor_cg();
-	   	MODE: coverpoint monitor_item.mode {
+	   	MODE: coverpoint m_item.mode {
 	   	bins int8 = {0};
 	   	bins fp16 = {1};
 	   	} 
@@ -21,7 +22,7 @@ class mac_env_coverage extends uvm_subscriber #(monitor_item);
 	endfunction : new
 
 	function void write(T t);
-		monitor_cg = t;
+		m_item = t;
 		monitor_cg.sample();
 	endfunction :write
 

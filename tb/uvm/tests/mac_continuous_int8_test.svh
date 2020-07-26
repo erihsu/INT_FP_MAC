@@ -1,7 +1,7 @@
-`ifndef MAC_CONTINUOUS_INT8_TEST_SV
-`define MAC_CONTINUOUS_INT8_TEST_SV
+`ifndef MAC_CONTINUOUS_INT8_TEST_SVH
+`define MAC_CONTINUOUS_INT8_TEST_SVH
 
-class mac_continuous_int8_test extends mac_base_test;
+class mac_continuous_int8_test extends base_test;
 	`uvm_component_utils(mac_continuous_int8_test);
 
   function new(string name = "mac_continuous_int8_test", uvm_component parent = null);
@@ -9,8 +9,8 @@ class mac_continuous_int8_test extends mac_base_test;
   endfunction
 
   task run_phase(uvm_phase phase);
-  	continuous_int8_vseq test;
-  	factory_create_o(single_int8_vseq,test);
+  	continuous_int8_seq test;
+  	`factory_create_o(continuous_int8_seq,test);
   	phase.raise_objection(this);
   	test.start(env0.mac_agt.sqr);
   	phase.drop_objection(this);
@@ -20,4 +20,4 @@ class mac_continuous_int8_test extends mac_base_test;
 
 endclass : mac_continuous_int8_test
 
-`endif /*MAC_CONTINUOUS_INT8_TEST_SV*/
+`endif /*MAC_CONTINUOUS_INT8_TEST_SVH*/

@@ -38,14 +38,13 @@ class mac_agent extends uvm_agent;
   endfunction
 
   virtual function void connect_phase(uvm_phase phase);
-    mon.mif = m_cfg.vmif;
     mon.ap.connect(ap);
     if (m_cfg.active == UVM_ACTIVE) begin
       drv.seq_item_port.connect(sqr.seq_item_export);
     end
 
     if (m_cfg.has_functional_coverage) begin
-      mom.ap.connect(mac_coverage.analysis_export);
+      mon.ap.connect(m_cov.analysis_export);
     end
     
   endfunction

@@ -1,19 +1,20 @@
 `ifndef MAC_TR_SVH
 `define MAC_TR_SVH
 
+typedef enum {NORMAL,OVERFLOW,UNDERFLOW} data_type_e;
 
 class monitor_item extends uvm_sequence_item;
   `uvm_object_utils(monitor_item)
 
-  rand bit [15:0] a;
-  rand bit [15:0] b;
-  rand bit [15:0] c;
-  rand bit en;
-  rand bit vld;
-  rand bit rd;
-  rand bit mode;
-  rand bit cfg;
-  rand bit error;
+  bit [15:0] a;
+  bit [15:0] b;
+  bit [15:0] c;
+  bit en;
+  bit vld;
+  bit rd;
+  bit mode;
+  bit cfg;
+  bit error;
 
   function new(string name = "monitor_item");
     super.new(name);
@@ -22,53 +23,66 @@ class monitor_item extends uvm_sequence_item;
 
 endclass: monitor_item 
 
+
 class mac_tr extends uvm_sequence_item;
   `uvm_object_utils(mac_tr)
 
-  rand bit [15:0] a;
-  rand bit [15:0] b;
-  rand bit en;
-  rand bit vld;
-  rand bit rd;
-  rand bit cfg;
+
+
+  rand bit [15:0] a[];
+  rand bit [15:0] b[];
+
   rand bit mode;
 
   // RTL independent
   int cfg_cycle = 2; // cycles of config
   int read_cycle = 2; // cycles of read
+  rand int size;
+  rand data_type_e data_type;
 
   function new(string name = "mac_tr");
     super.new(name);
   endfunction
 
+  constraint base_c {
+    a.size() == size;
+    b.size() == size;
+  }
+
+  constraint data_type_c {  // constraint for whether normal data or invalid data(may introduce overflow or underflow)
+    if (mode == 1'b1){
+      if (data_type == NORMAL) {
+        foreach (a[i]) {
+          a[i][14:10] inside {[5'b01000:5'b10000]};
+        }
+        foreach (b[i]) {
+          b[i][14:10] inside {[5'b01000:5'b10000]};
+        }
+      }
+      else if (data_type == OVERFLOW) {
+        foreach (a[i]) {
+          a[i][14:10] inside {[5'b10111:5'b11111]};
+        }
+        foreach (b[i]) {
+          b[i][14:10] inside {[5'b10111:5'b11111]};
+        }
+      }
+      else {
+        foreach (a[i]) {
+          a[i][14:10] inside {[5'b00000:5'b01000]};
+        }
+        foreach (b[i]) {
+          b[i][14:10] inside {[5'b00000:5'b01000]};
+        }        
+      }
+    }
+  }
+
+  constraint c_order {
+    solve size before a,b;
+  }
+
 endclass : mac_tr
-
-// class mac_int8 extends mac_tr;
-//   `uvm_object_utils(mac_int8)  
-
-//   function new(string name = "mac_int8");
-//     super.new(name);
-//   endfunction
-
-//   constraint cfg_int8 {
-//     mode == 1'b0;
-//   }
-
-// endclass: mac_int8
-
-// class mac_fp16 extends mac_tr;
-//   `uvm_object_utils(mac_fp16)  
-
-//   function new(string name = "mac_fp16");
-//     super.new(name);
-//   endfunction
-
-//   constraint cfg_fp16 {
-//     mode == 1'b1;
-//   }
-
-// endclass: mac_fp16
-
 
 
 `endif  /* MAC_TR_SVH */

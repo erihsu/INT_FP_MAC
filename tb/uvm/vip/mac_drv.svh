@@ -2,7 +2,7 @@
 `define MAC_DRV_SVH
 
 typedef class mac_driver;
-class mac_driver extends uvm_driver #(mac_int8);
+class mac_driver extends uvm_driver #(mac_tr);
 
   `uvm_component_utils(mac_driver);
 
@@ -20,7 +20,6 @@ class mac_driver extends uvm_driver #(mac_int8);
 
   task run_phase(uvm_phase phase);
   
-    `uvm_info( get_name(), $sformatf("HIERARCHY: %m"), UVM_LOW);
     forever begin
 
         seq_item_port.try_next_item(req);
@@ -37,7 +36,7 @@ class mac_driver extends uvm_driver #(mac_int8);
           mif.sck.b <= $urandom_range(65535,0);
         end
         else begin
-          `uvm_info("DRV","Sending valid data",UVM_LOW);
+          `uvm_info("DRV","Sending valid data",UVM_HIGH);
 
           for (int i =0;i<req.cfg_cycle;i++) begin
             @(mif.sck);
@@ -86,13 +85,14 @@ class mac_driver extends uvm_driver #(mac_int8);
             else begin 
               mif.sck.en <= 1'b1;
               mif.sck.vld <= 1'b0;
-              mif.sck.rd <= 1'b1;
+              mif.sck.rd <= 1'b0;
               mif.sck.mode <= 1'b0;
               mif.sck.cfg <= 1'b0;
               mif.sck.a <= 16'b0;
               mif.sck.b <= 16'b0;
             end
           end
+        @(mif.sck);
         seq_item_port.item_done();
       end
     end

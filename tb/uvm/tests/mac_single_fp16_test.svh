@@ -1,7 +1,7 @@
-`ifndef MAC_SINGLE_FP16_TEST_SV
-`define MAC_SINGLE_FP16_TEST_SV
+`ifndef MAC_SINGLE_FP16_TEST_SVH
+`define MAC_SINGLE_FP16_TEST_SVH
 
-class mac_single_fp16_test extends mac_base_test;
+class mac_single_fp16_test extends base_test;
 	`uvm_component_utils(mac_single_fp16_test);
 
   function new(string name = "mac_single_fp16_test", uvm_component parent = null);
@@ -9,8 +9,8 @@ class mac_single_fp16_test extends mac_base_test;
   endfunction
 
   task run_phase(uvm_phase phase);
-  	single_fp16_vseq test;
-  	factory_create_o(single_int8_vseq,test);
+  	single_fp16_seq test;
+  	`factory_create_o(single_fp16_seq,test);
   	phase.raise_objection(this);
   	test.start(env0.mac_agt.sqr);
   	phase.drop_objection(this);
@@ -20,4 +20,4 @@ class mac_single_fp16_test extends mac_base_test;
 
 endclass : mac_single_fp16_test
 
-`endif /*MAC_SINGLE_FP16_TEST_SV*/
+`endif /*MAC_SINGLE_FP16_TEST_SVH*/

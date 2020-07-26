@@ -5,8 +5,6 @@ class mac_agent_config extends uvm_object;
 
 	`uvm_object_utils(mac_agent_config);
 
-	virtual mac_if vmif;
-
 	uvm_active_passive_enum active = UVM_ACTIVE;
 	bit has_functional_coverage = 1;
 

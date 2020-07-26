@@ -1,4 +1,4 @@
-`define PATTERN "/home/eric/INT_FP_MAC/utils/add_fp16_golden_pattern.txt"
+`define PATTERN "/home/eric/INT_FP_MAC/utils/add_golden_pattern.txt"
 `define PATTERN_NUM 10
 module int_fp_add_tb ();
 

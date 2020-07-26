@@ -6,9 +6,11 @@
 import numpy as np 
 import random 
 
-def generate_int8_mul_golden():
+def generate_mul_golden():
     golden_list = ""
     golden_list_dec = ""
+
+    # case for int8
     for _ in range(10):
         a = random.randint(-127,128)
         b = random.randint(-127,128)
@@ -19,17 +21,8 @@ def generate_int8_mul_golden():
         golden_list += "{}_{}_{}_0\n".format(a_bin,b_bin,expected_bin)
         golden_list_dec += "{}(int8) * {}(int8) = {}(int8)\n".format(a,b,expected)
 
-    with open("mul_int8_golden_pattern.txt",'w') as f:
-        f.write(golden_list)
-    with open("mul_int8_golden_decimal.txt",'w') as f:
-        f.write(golden_list_dec)
-
-def generate_fp16_mul_golden():
-
-    golden_list = ""
-    golden_list_dec = ""
-
-    for _ in range(10):
+    # underflow case for fp16
+    for _ in range(5):
         a = random.uniform(-0.0001,0.0001)
         b = random.uniform(-0.0001,0.0001)
         expected = a*b
@@ -38,16 +31,42 @@ def generate_fp16_mul_golden():
         expected_bin = bin(np.float16(expected).view("H"))[2:].zfill(16)
         
         golden_list += "{}_{}_{}_1\n".format(a_bin,b_bin,expected_bin)
-        golden_list_dec += "{}(fp16) * {}(fp16) = {}(fp16)\n".format(a,b,expected)        
-       
-    with open("mul_fp16_golden_pattern.txt",'w') as f:
+        golden_list_dec += "{}(fp16) * {}(fp16) = {}(fp16)\n".format(a,b,expected) 
+
+    # overflow case for fp16
+    for _ in range(5):
+        a = random.uniform(10000,10100)
+        b = random.uniform(-10100,-10000)
+        expected = a*b
+        a_bin =  bin(np.float16(a).view("H"))[2:].zfill(16)
+        b_bin =  bin(np.float16(b).view("H"))[2:].zfill(16)
+        expected_bin = bin(np.float16(expected).view("H"))[2:].zfill(16)
+        
+        golden_list += "{}_{}_{}_1\n".format(a_bin,b_bin,expected_bin)
+        golden_list_dec += "{}(fp16) * {}(fp16) = {}(fp16)\n".format(a,b,expected) 
+
+    # normal case for fp16
+    for _ in range(10):
+        a = random.uniform(-1,1)
+        b = random.uniform(-1,1)
+        expected = a*b
+        a_bin =  bin(np.float16(a).view("H"))[2:].zfill(16)
+        b_bin =  bin(np.float16(b).view("H"))[2:].zfill(16)
+        expected_bin = bin(np.float16(expected).view("H"))[2:].zfill(16)
+        
+        golden_list += "{}_{}_{}_1\n".format(a_bin,b_bin,expected_bin)
+        golden_list_dec += "{}(fp16) * {}(fp16) = {}(fp16)\n".format(a,b,expected) 
+
+    with open("mul_golden_pattern.txt",'w') as f:
         f.write(golden_list)
-    with open("mul_fp16_golden_decimal.txt",'w') as f:
+    with open("mul_golden_decimal.txt",'w') as f:
         f.write(golden_list_dec)
 
-def generate_int8_add_golden():
+def generate_add_golden():
     golden_list = ""
     golden_list_dec = ""
+
+    # case for int8
     for _ in range(10):
         a = random.randint(-127,128)
         b = random.randint(-127,128)
@@ -58,29 +77,20 @@ def generate_int8_add_golden():
         golden_list += "{}_{}_{}_0\n".format(a_bin,b_bin,expected_bin)
         golden_list_dec += "{}(int8) + {}(int8) = {}(int8)\n".format(a,b,expected)
 
-    with open("add_int8_golden_pattern.txt",'w') as f:
-        f.write(golden_list)
-    with open("add_int8_golden_decimal.txt",'w') as f:
-        f.write(golden_list_dec)
-
-def generate_fp16_add_golden():
-
-    golden_list = ""
-    golden_list_dec = ""
-
+    #case for fp16
     for _ in range(10):
-        a = random.uniform(-0.0001,0.0001)
-        b = random.uniform(-0.0001,0.0001)
+        a = random.uniform(-1,1)
+        b = random.uniform(-1,1)
         expected = a+b
         a_bin =  bin(np.float16(a).view("H"))[2:].zfill(16)
         b_bin =  bin(np.float16(b).view("H"))[2:].zfill(16)
         expected_bin = bin(np.float16(expected).view("H"))[2:].zfill(16)
         golden_list += "{}_{}_{}_1\n".format(a_bin,b_bin,expected_bin)
-        golden_list_dec += "{}(fp16) + {}(fp16) = {}(fp16)\n".format(a,b,expected)        
-       
-    with open("add_fp16_golden_pattern.txt",'w') as f:
+        golden_list_dec += "{}(fp16) + {}(fp16) = {}(fp16)\n".format(a,b,expected) 
+
+    with open("add_golden_pattern.txt",'w') as f:
         f.write(golden_list)
-    with open("add_fp16_golden_decimal.txt",'w') as f:
+    with open("add_golden_decimal.txt",'w') as f:
         f.write(golden_list_dec)
 
 def generate_fp16_mac_golden():
@@ -89,9 +99,9 @@ def generate_fp16_mac_golden():
     golden_list_dec = ""
 
     for _ in range(10):
-        a = random.uniform(-0.001,0.001)
-        b = random.uniform(-0.001,0.001)
-        c = random.uniform(-0.001,0.001)
+        a = random.uniform(-1,1)
+        b = random.uniform(-1,1)
+        c = random.uniform(-1,1)
         expected = a*b + c
         a_bin =  bin(np.float16(a).view("H"))[2:].zfill(16)
         b_bin =  bin(np.float16(b).view("H"))[2:].zfill(16)
@@ -106,8 +116,8 @@ def generate_fp16_mac_golden():
         f.write(golden_list_dec)
 
 if __name__ == "__main__":
-    generate_fp16_mul_golden()
-    generate_fp16_add_golden()
+    generate_mul_golden()
+    generate_add_golden()
     generate_fp16_mac_golden()
 
 

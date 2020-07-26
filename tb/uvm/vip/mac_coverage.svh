@@ -1,11 +1,11 @@
 `ifndef MAC_COVERAGE_SVH
 `define MAC_COVERAGE_SVH
 
-class mac_coverage extends uvm_subscriber #(mac_tr);
+class mac_coverage extends uvm_subscriber #(monitor_item);
 
-	`uvm_component(mac_coverage);
+	`uvm_component_utils(mac_coverage);
 
-	mac_tr mac_tr;
+	monitor_item tr_item;
 
 	function new (string name = "mac_coverage", uvm_component parent = null);
 		super.new(name,parent);
@@ -14,12 +14,12 @@ class mac_coverage extends uvm_subscriber #(mac_tr);
 	endfunction : new
 
 	function void write (T t);
-		mac_tr = t;
+		tr_item = t;
 		mac_cov.sample();
-	endfunction : 
+	endfunction : write
 
 	covergroup mac_cov();
-	   	MODE: coverpoint mac_tr.mode {
+	   	MODE: coverpoint tr_item.mode {
 	   	bins int8 = {0};
 	   	bins fp16 = {1};
 	   	} 

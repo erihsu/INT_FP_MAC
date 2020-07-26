@@ -1,16 +1,11 @@
 `include "mac_top.v"
-`include "macro_def.sv"
-`include "mac_agent_pkg.sv"
+`include "mac_test_pkg.sv"
 
-import mac_agent_pkg::*;
 import uvm_pkg::*;
+import mac_test_pkg::*;
 
 module mac_tb();
 
-  `include "mac_scoreboard.sv"
-  `include "mac_env.sv"
-
-  `include "mac_test.sv"
 
   logic clk;
   logic rst_n;
@@ -44,18 +39,9 @@ module mac_tb();
   end
 
   initial begin
-    uvm_config_db #(virtual mac_if)::set(null, "uvm_test_top.*", "vif", mac_tb.mif);
-  end
-
-  initial begin
+    uvm_config_db #(virtual mac_if)::set(null, "uvm_test_top*", "vif", mif);
     uvm_top.enable_print_topology = 1;
     run_test();
   end
-
-  // initial begin
-
-  //   #400ns;
-  //   $finish;
-  // end
 
 endmodule

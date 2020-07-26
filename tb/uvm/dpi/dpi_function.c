@@ -50,15 +50,16 @@ int int8_mul    (const int8* a,
 
 
 int int16_2_real (const int16* a){
-
-    return (a->sign == 0) ? (a->value) : -1*(a->value);
+    int real_a;
+    real_a = (a->sign == 0) ? (a->value) : -1*(a->value);
+    return real_a;
 }
 
 svBit is_float_equal(double a,
                      double b){
     
     svBit is_equal;
-    double precision = 1e-6;
+    double precision = 4e-2;
     if (fabs(a-b) < precision){
         is_equal = 1;
     } else {

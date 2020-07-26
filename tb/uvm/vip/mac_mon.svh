@@ -17,17 +17,17 @@ class mac_monitor extends uvm_monitor;
   virtual function void build_phase(uvm_phase phase);
     if (!uvm_config_db #(virtual mac_if)::get(this, "", "vif", mif)) begin
       `uvm_fatal(get_full_name(), "No virtual interface found");
-    
     end
   endfunction
 
   task run_phase(uvm_phase phase);
-    `uvm_info("MON","Monitor data",UVM_LOW)
+    `uvm_info("MON","Monitor data",UVM_HIGH)
     forever begin    
       monitor_item tr = monitor_item::type_id::create("tr", this);
       @(mif.pck);
       tr.a = mif.pck.a;
       tr.b = mif.pck.b;
+      tr.c = mif.pck.c;
       tr.en = mif.pck.en;
       tr.vld = mif.pck.vld;
       tr.rd = mif.pck.rd;

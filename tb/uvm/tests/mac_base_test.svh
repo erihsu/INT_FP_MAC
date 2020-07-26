@@ -1,5 +1,5 @@
-`ifndef MAC_TEST_SV
-`define MAC_TEST_SV
+`ifndef MAC_TEST_SVH
+`define MAC_TEST_SVH
 
 
 class base_test extends uvm_test;
@@ -17,6 +17,15 @@ class base_test extends uvm_test;
 
   endfunction
 
+  function void report_phase(uvm_phase phase);
+      if (env0.mac_scr.error_cnt == 0) begin
+        `uvm_info("SUMMARY","TEST PASSED",UVM_LOW);
+      end
+      else begin 
+        `uvm_info("SUMMARY","TEST FAILED",UVM_LOW);
+      end 
+  endfunction
+
 endclass : base_test
 
-`endif  /* MAC_TEST_SV */
+`endif  /* MAC_TEST_SVH */
