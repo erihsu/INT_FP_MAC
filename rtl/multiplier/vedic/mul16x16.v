@@ -8,26 +8,15 @@ module mul16x16(
     output [31:0] c);
 
     wire [63:0] tmp1,tmp2;
+    wire [63:0] c_pre;
     wire [23:0] result1;
     wire [23:0] result2;
     wire co1,co2,co3;
 
-`ifdef PIPLINE
-	// one stage pipline
-	reg [63:0] tmp1_reg;
-    always @ (posedge clk or negedge rst_n) begin
-        if (!rst_n) begin
-            tmp1_reg <= 64'b0;
-        end else begin
-            tmp1_reg <= tmp1;
-        end
-    end
-    assign tmp2 = tmp1_reg;
-
-`else 
 	assign tmp2 = tmp1;
 
-`endif
+    // special case of int8 mode MAC
+    assign c = (a[15:7] == 9'b0 && b[15:7] == 9'b0) ? {48'b0,tmp1[15:0]} : c_pre[63:0];
 
     mul8x8 u1(a[15:8],b[15:8],tmp1[63:48]);
     mul8x8 u2(a[7:0] ,b[15:8],tmp1[47:32]);
@@ -36,8 +25,8 @@ module mul16x16(
 
     cla_nbit #(.n(24)) u5({tmp2[63:48],8'b0} ,{8'b0,tmp2[47:32]} ,1'b0 ,result1 ,co1);
     cla_nbit #(.n(24)) u6({8'b0,tmp2[31:16]} ,{16'b0,tmp2[15:8]} ,co1  ,result2 ,co2);
-    cla_nbit #(.n(24)) u7(result1            ,result2            ,co2  ,c[31:8] ,co3);
+    cla_nbit #(.n(24)) u7(result1            ,result2            ,co2  ,c_pre[31:8] ,co3);
 
-    assign c[7:0] = tmp2[7:0];
+    assign c_pre[7:0] = tmp2[7:0];
 
 endmodule
