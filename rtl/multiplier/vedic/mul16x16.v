@@ -8,7 +8,7 @@ module mul16x16(
     output [31:0] c);
 
     wire [63:0] tmp1,tmp2;
-    wire [63:0] c_pre;
+    wire [31:0] c_pre;
     wire [23:0] result1;
     wire [23:0] result2;
     wire co1,co2,co3;
@@ -16,7 +16,7 @@ module mul16x16(
 	assign tmp2 = tmp1;
 
     // special case of int8 mode MAC
-    assign c = (a[15:7] == 9'b0 && b[15:7] == 9'b0) ? {48'b0,tmp1[15:0]} : c_pre[63:0];
+    assign c = (a[15:7] == 9'b0 && b[15:7] == 9'b0) ? {16'b0,tmp1[15:0]} : c_pre[31:0];
 
     mul8x8 u1(a[15:8],b[15:8],tmp1[63:48]);
     mul8x8 u2(a[7:0] ,b[15:8],tmp1[47:32]);
