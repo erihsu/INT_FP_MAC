@@ -27,7 +27,7 @@ set symbol_library tsmc090.sdb
 define_design_lib mac_xzy -path ./Intro_TopSynth
 #
 # Precompile and check all modules:
-analyze -work mac_xzy -format verilog "../../rtl/mac/mac_xzy.v" 
+analyze -work mac_xzy -format verilog "../../rtl/mac/mac_top.v" 
 analyze -work mac_xzy -format verilog "../../rtl/mac/mac_unit.v"
 analyze -work mac_xzy -format verilog "../../rtl/adder/cla/cla_nbit.v" 
 analyze -work mac_xzy -format verilog "../../rtl/adder/adder/add_normalizer.v" 
@@ -42,31 +42,18 @@ analyze -work mac_xzy -format verilog "../../rtl/multiplier/mul/int_fp_mul.v"
 
 #
 # Prelink the complete design (top module):
-elaborate -work mac_xzy mac_xzy
+elaborate -work mac_xzy mac_top
 #
 # ---------------------------------
 #
 set_operating_conditions   typical
 # Must specify every module ("design"):
 set_wire_load_model -name "tsmc090_wl10" [all_designs]
-#
-# For XG mode portability to back-end tools:
-# set_fix_multiple_port_nets -all -buffer_constants
-#
-# Some netlist-level design rules:
-# set_drive      5.0 [all_inputs]
-# set_load       1.0 [all_outputs]
-# set_max_fanout 5   [all_inputs]
-#
-# Design-specific constraints:
-# set_max_area   200
-# set_max_delay  0.5 -to [all_outputs]
-#
-# Drop into interactive mode for compile & optimize:
-#
+
 create_clock -name "clock" -period 7 -waveform { 0 3.5 }  { clk }
 
-compile_ultra -gate_clock 
+compile_ultra
+ 
 #
 # check the timing and area infomation
  report_timing > ./report/timing_rpt
