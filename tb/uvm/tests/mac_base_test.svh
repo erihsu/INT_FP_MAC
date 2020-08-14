@@ -17,6 +17,14 @@ class base_test extends uvm_test;
 
   endfunction
 
+  task run_phase(uvm_phase phase);
+    base_seq test;
+    `factory_create_o(base_seq,test);
+    phase.raise_objection(this);
+    test.start(env0.mac_agt.sqr);
+    phase.drop_objection(this);
+  endtask : run_phase
+
   function void report_phase(uvm_phase phase);
       if (env0.mac_scr.error_cnt == 0) begin
         `uvm_info("SUMMARY","TEST PASSED",UVM_LOW);

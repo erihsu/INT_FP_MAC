@@ -26,9 +26,6 @@ endclass: monitor_item
 
 class mac_tr extends uvm_sequence_item;
   `uvm_object_utils(mac_tr)
-
-
-
   rand bit [15:0] a[];
   rand bit [15:0] b[];
 
@@ -49,32 +46,18 @@ class mac_tr extends uvm_sequence_item;
     b.size() == size;
   }
 
-  constraint data_type_c {  // constraint for whether normal data or invalid data(may introduce overflow or underflow)
-    if (mode == 1'b1){
-      if (data_type == NORMAL) {
+  constraint size_c {
+    size inside {1,[5:10],[10,20]};
+  }
+
+  constraint data_c {  // constraint for whether normal data or invalid data(may introduce overflow or underflow)
+    if (mode == 1'b1) {
         foreach (a[i]) {
           a[i][14:10] inside {[5'b01000:5'b10000]};
         }
         foreach (b[i]) {
           b[i][14:10] inside {[5'b01000:5'b10000]};
         }
-      }
-      else if (data_type == OVERFLOW) {
-        foreach (a[i]) {
-          a[i][14:10] inside {[5'b10111:5'b11111]};
-        }
-        foreach (b[i]) {
-          b[i][14:10] inside {[5'b10111:5'b11111]};
-        }
-      }
-      else {
-        foreach (a[i]) {
-          a[i][14:10] inside {[5'b00000:5'b01000]};
-        }
-        foreach (b[i]) {
-          b[i][14:10] inside {[5'b00000:5'b01000]};
-        }        
-      }
     }
   }
 
