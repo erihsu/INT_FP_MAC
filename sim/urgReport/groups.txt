@@ -1,0 +1,12 @@
+Testbench Group List
+
+Total Groups Coverage Summary 
+SCORE  WEIGHT 
+100.00 1      
+
+
+Total groups in report: 1
+-------------------------------------------------------------------------------
+SCORE  WEIGHT GOAL   AT LEAST PER INSTANCE AUTO BIN MAX PRINT MISSING COMMENT NAME                                       
+100.00 1      100    1        0            64           64                    mac_test_pkg::mac_env_coverage::monitor_cg 
+

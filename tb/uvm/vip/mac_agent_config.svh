@@ -6,7 +6,7 @@ class mac_agent_config extends uvm_object;
 	`uvm_object_utils(mac_agent_config);
 
 	uvm_active_passive_enum active = UVM_ACTIVE;
-	bit has_functional_coverage = 1;
+	bit has_functional_coverage = 0;
 
 	function new (string name = "mac_agent_config");
 		super.new(name);

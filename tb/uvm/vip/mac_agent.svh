@@ -11,6 +11,7 @@ class mac_agent extends uvm_agent;
 
   // components
   uvm_analysis_port #(monitor_item) ap;
+  uvm_analysis_port #(mac_tr) ap2;
   mac_driver drv;
   mac_monitor mon;
   mac_sequencer sqr;
@@ -35,6 +36,7 @@ class mac_agent extends uvm_agent;
       `factory_create_c(mac_coverage,m_cov);
     end
     ap  = new("ap",this);
+    ap2 = new("ap2",this);
   endfunction
 
   virtual function void connect_phase(uvm_phase phase);
@@ -44,7 +46,7 @@ class mac_agent extends uvm_agent;
     end
 
     if (m_cfg.has_functional_coverage) begin
-      mon.ap.connect(m_cov.analysis_export);
+      ap2.connect(m_cov.analysis_export);
     end
     
   endfunction

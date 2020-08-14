@@ -1,0 +1,51 @@
+Group : mac_test_pkg::mac_env_coverage::monitor_cg
+
+===============================================================================
+Group : mac_test_pkg::mac_env_coverage::monitor_cg
+===============================================================================
+SCORE  WEIGHT GOAL   AT LEAST AUTO BIN MAX PRINT MISSING 
+100.00 1      100    1        64           64            
+
+
+Source File(s) : 
+
+/home/eric/INT_FP_MAC/sim/../tb/uvm/mac_env_coverage.sv
+
+
+
+-------------------------------------------------------------------------------
+
+Summary for Group   mac_test_pkg::mac_env_coverage::monitor_cg
+
+
+
+CATEGORY  EXPECTED UNCOVERED COVERED PERCENT 
+Variables 2        0         2       100.00  
+
+
+Variables for Group  mac_test_pkg::mac_env_coverage::monitor_cg
+
+
+VARIABLE EXPECTED UNCOVERED COVERED PERCENT GOAL WEIGHT AT LEAST AUTO BIN MAX COMMENT 
+MODE     2        0         2       100.00  100  1      1        0                    
+
+
+-------------------------------------------------------------------------------
+
+Summary for Variable MODE
+
+
+CATEGORY          EXPECTED UNCOVERED COVERED PERCENT 
+User Defined Bins 2        0         2       100.00  
+
+
+User Defined Bins for MODE
+
+
+Bins
+
+NAME COUNT AT LEAST 
+fp16 47    1        
+int8 154   1        
+
+

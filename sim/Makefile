@@ -1,10 +1,10 @@
-all: compile simulate
+all: compile simulate urg_run
 
 compile: compile_mac_tb
 
 compile_mac_tb:
 	vcs -full64 -l uvm_tests_pkg.log -sverilog -override_timescale=1ns/1ps \
-	    -ntb_opts uvm-1.2 \
+	    -ntb_opts uvm-1.2 -lca -cm line\
 		-y ../rtl/adder/cla \
 		-y ../rtl/adder/adder \
 		-y ../rtl/multiplier/vedic \
@@ -16,16 +16,10 @@ compile_mac_tb:
 	    ../tb/uvm/mac_tb.sv \
 		../tb/uvm/dpi/dpi_function.c
 
-simulate: sim_testcase1 sim_testcase2 sim_testcase3 sim_testcase4
+simulate: sim_basetest
 
-sim_testcase1:
-	./simv +UVM_TESTNAME=mac_single_int8_test
+sim_basetest:
+	./simv +UVM_TESTNAME=base_test -lca
 
-sim_testcase2:
-	./simv +UVM_TESTNAME=mac_single_fp16_test
-
-sim_testcase3:
-	./simv +UVM_TESTNAME=mac_continuous_int8_test
-
-sim_testcase4:
-	./simv +UVM_TESTNAME=mac_continuous_fp16_test
+urg_run:
+	urg -dir simv.vdb -format both

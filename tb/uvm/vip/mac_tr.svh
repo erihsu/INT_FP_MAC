@@ -46,8 +46,12 @@ class mac_tr extends uvm_sequence_item;
     b.size() == size;
   }
 
+  constraint mode_c {
+    mode dist {0:=50,1:=50};
+  }
+
   constraint size_c {
-    size inside {1,[5:10],[10,20]};
+    size inside {[1:9]};
   }
 
   constraint data_c {  // constraint for whether normal data or invalid data(may introduce overflow or underflow)

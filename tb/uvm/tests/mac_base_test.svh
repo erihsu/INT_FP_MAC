@@ -19,10 +19,12 @@ class base_test extends uvm_test;
 
   task run_phase(uvm_phase phase);
     base_seq test;
-    `factory_create_o(base_seq,test);
-    phase.raise_objection(this);
-    test.start(env0.mac_agt.sqr);
-    phase.drop_objection(this);
+    for (int i=0; i<20; i++) begin
+      `factory_create_o(base_seq,test);
+      phase.raise_objection(this);
+      test.start(env0.mac_agt.sqr);
+      phase.drop_objection(this);
+    end
   endtask : run_phase
 
   function void report_phase(uvm_phase phase);

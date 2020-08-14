@@ -9,7 +9,7 @@
 	//  enable   ________|-----------------------------------------------|_____
 	//  valid    ______________|-----------------|____________________________
 	//  read     ____________________________________________|----|___________
-	//  cfg      _|----|_|xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx|_____
+	//  cfg      _|----|_|xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx|____  
 	//  in_a     ______________|abcde|abcde|abcde|____________________________
 	//  in_b     ______________|abcde|abcde|abcde|____________________________
 	//  mac_out  ____________________________________________|jklm|___________
@@ -59,6 +59,12 @@ module mac_top
 				b_reg   <= in_b ;
 				c_reg   <= mac_out_tmp;
 			end
+			else if (read) begin // reset data after read operation
+				c_reg <= 16'b0;
+				a_reg <= 16'b0;
+				b_reg <= 16'b0;
+			end
+
 		end else if (cfg) begin
 			mode_reg <= mode;
 		end 

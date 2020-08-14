@@ -93,6 +93,13 @@ class mac_driver extends uvm_driver #(mac_tr);
             end
           end
         @(mif.sck);
+        mif.sck.en <= 1'b0;
+        mif.sck.vld <= 1'b0;
+        mif.sck.rd <= 1'b0;
+        mif.sck.mode <= 1'b0;
+        mif.sck.cfg <= 1'b0;
+        mif.sck.a <= 16'b0;
+        mif.sck.b <= 16'b0;
         seq_item_port.item_done();
       end
     end

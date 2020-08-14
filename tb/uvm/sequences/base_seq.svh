@@ -11,12 +11,10 @@ class base_seq extends uvm_sequence #(mac_tr);
 	endfunction : new
 
 	task body;
-		for (int i = 0; i < 100; i++) begin
-	    	`factory_create_o(mac_tr,tr);
-			start_item(tr);
-	    	if (!tr.randomize()) `uvm_fatal("S_FP16_SEQ","randomize failed");
-		    finish_item(tr);
-		end
+		`factory_create_o(mac_tr,tr);
+		start_item(tr);
+		if (!tr.randomize()) `uvm_fatal("S_FP16_SEQ","randomize failed");
+		finish_item(tr);
 	endtask : body
 
 endclass : base_seq

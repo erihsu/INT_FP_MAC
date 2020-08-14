@@ -7,7 +7,7 @@ module int_fp_mul (
     input  [15:0] a,
     input  [15:0] b,
     output [15:0] c,
-    output        error
+    output        error // valid in fp16 mode 
     );
 
     wire [15:0] c_tmp;

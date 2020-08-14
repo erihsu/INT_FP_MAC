@@ -1,0 +1,21 @@
+Dashboard
+
+Date: Fri Aug 14 23:10:28 2020
+
+User: eric
+
+Version: O-2018.09-SP2
+Command line: urg -dir simv.vdb -format both
+Number of tests: 1
+
+-------------------------------------------------------------------------------
+Total Coverage Summary 
+SCORE  GROUP  
+100.00 100.00 
+
+
+-------------------------------------------------------------------------------
+Total Groups Coverage Summary 
+SCORE  WEIGHT 
+100.00 1      
+
