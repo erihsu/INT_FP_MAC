@@ -1,1 +1,1 @@
-rm -rf simv* csrc *.log ucli.* *.vcd *.h
+rm -rf simv* csrc *.log ucli.* *.vcd *.h urgReport

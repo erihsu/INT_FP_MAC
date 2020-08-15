@@ -13,9 +13,5 @@ import seq_pkg::*;
 
 
 `include "mac_base_test.svh"
-`include "mac_single_int8_test.svh"
-`include "mac_single_fp16_test.svh"
-`include "mac_continuous_int8_test.svh"
-`include "mac_continuous_fp16_test.svh"
 
 endpackage: mac_test_pkg
