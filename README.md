@@ -26,4 +26,4 @@ The verification process is carried out with directed testing and UVM (a state-o
 | MAC Function            |UVM (Constraint Random)  |SystemVerilog|Passed|
 
 ### Coverage
-![Coverage report](https://github.com/xuzhenyu69/INT_FP_MAC/coverage.png)
+![Coverage report](coverage.png)
