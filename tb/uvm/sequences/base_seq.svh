@@ -14,6 +14,7 @@ class base_seq extends uvm_sequence #(mac_tr);
 		`factory_create_o(mac_tr,tr);
 		start_item(tr);
 		if (!tr.randomize()) `uvm_fatal("S_FP16_SEQ","randomize failed");
+		// tr.randomize() else `uvm_fatal("S_FP16_SEQ","randomize failed");
 		finish_item(tr);
 	endtask : body
 

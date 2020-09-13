@@ -24,3 +24,6 @@ The verification process is carried out with directed testing and UVM (a state-o
 | Adder in FP16 mode      |Directed                 |Verilog|Passed|
 | Multiplier in FP16 mode |Directed                 |Verilog|Passed|
 | MAC Function            |UVM (Constraint Random)  |SystemVerilog|Passed|
+
+### Coverage
+![Coverage report](coverage.png)
