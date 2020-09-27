@@ -1,8 +1,9 @@
 
 # INT_FP_MAC
-
+## About Design
 The design is a multiplier accumulator (MAC) support both INT8 and FP16 data format. The whole design is ASIC-specific and fully sythesizable independent of any IPs.
-
+## About Principle
+This design is provide for someone learning digital circuits Design, Verification and Synthesis.
 
 ## Design
 
